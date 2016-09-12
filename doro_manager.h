@@ -41,6 +41,16 @@ private slots:                               //daclared private functions
     void on_stopButton_clicked();
 
 
+    void on_pushButton_pTimer_clicked();
+
+    void on_pushButton_Calendar_clicked();
+
+    void on_pushButton_tList_clicked();
+
+    void on_pushButton_dList_clicked();
+
+    void on_aboutButton_clicked();
+
 private:
     Ui::doro_manager *ui;
 

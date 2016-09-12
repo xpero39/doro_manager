@@ -154,3 +154,28 @@ doro_manager::~doro_manager()
     delete ui;
 }
 
+
+void doro_manager::on_pushButton_pTimer_clicked()
+{
+    ui->tabWidget->setCurrentIndex(1);
+}
+
+void doro_manager::on_pushButton_Calendar_clicked()
+{
+    ui->tabWidget->setCurrentIndex(2);
+}
+
+void doro_manager::on_pushButton_tList_clicked()
+{
+    ui->tabWidget->setCurrentIndex(3);
+}
+
+void doro_manager::on_pushButton_dList_clicked()
+{
+    ui->tabWidget->setCurrentIndex(4);
+}
+
+void doro_manager::on_aboutButton_clicked()
+{
+    QMessageBox::information(this, tr("About Doro Manager."), tr("<p>Doro Manager is a pomodoro tehnique time managment application for more productive work or study.</p>"));
+}
