@@ -23,39 +23,41 @@ public:
     explicit doro_manager(QWidget *parent = 0);
     ~doro_manager();
 
-private slots:                               //daclared private functions
+private slots:                               //declared private functions
+
     void showDateTime();
 
     void on_startButton_clicked();
-
-    void on_closeButton_clicked();
 
     void on_resetButton_clicked();
 
     void showTime();
 
-    void odstevanje();
+    void countdown();
 
     void on_infoButton_clicked();
 
     void on_stopButton_clicked();
 
-
-    void on_pushButton_pTimer_clicked();
-
-    void on_pushButton_Calendar_clicked();
-
-    void on_pushButton_tList_clicked();
-
-    void on_pushButton_dList_clicked();
-
     void on_aboutButton_clicked();
+
+    void on_pTimerButton_clicked();
+
+    void on_calendarButton_clicked();
+
+    void on_taskListButton_clicked();
+
+    void on_distractListButton_clicked();
+
+    void on_quitButton_clicked();
+
+    void on_breakButton_clicked();
 
 private:
     Ui::doro_manager *ui;
 
-    QTimer *timer;                          //daclared pointers
-    QTimer *timer1;                          //daclared pointers
+    QTimer *timer;                          //declared pointers
+    QTimer *timer1;
     QTimer *kaz;
 };
 
