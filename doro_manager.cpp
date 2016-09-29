@@ -181,5 +181,18 @@ void doro_manager::on_quitButton_clicked()          // Main Tab button that clos
 
 void doro_manager::on_breakButton_clicked()     // Pomdoro timer tab button which sets pomodoro timer to break mode
 {
-
+    if(activeWork==true){
+        activeWork=false;
+        activeBreak=true;
+    timeValueMin = ui->hSliderBreak->value();
+    ui->counterLabel->setNum(timeValueMin);
+    timeValueSec = 0;
+    ui->counterLabel2->setNum(timeValueSec);
+    }
+    else if(activeBreak==true){
+        timeValueMin = ui->hSliderBreak->value();
+        ui->counterLabel->setNum(timeValueMin);
+        timeValueSec = 0;
+        ui->counterLabel2->setNum(timeValueSec);
+    }
 }
