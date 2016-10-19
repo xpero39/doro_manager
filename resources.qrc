@@ -1,3 +1,6 @@
 <RCC>
     <qresource prefix="/Images"/>
+    <qresource prefix="/Database">
+        <file>doro_data.db</file>
+    </qresource>
 </RCC>

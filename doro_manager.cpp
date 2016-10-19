@@ -4,6 +4,8 @@
 #include <QDate>
 #include <QString>
 #include <QTimer>
+#include <QApplication>
+#include <QStyleFactory>
 
 #include <QtSql>
 #include <QtDebug>
@@ -16,6 +18,8 @@ doro_manager::doro_manager(QWidget *parent) :
     ui(new Ui::doro_manager)
 {
     ui->setupUi(this);
+
+    QApplication::setStyle(QStyleFactory::create("Fusion"));
 
     this->timer1= new QTimer(this);                                         //pointer for Main Tab showing time and date
     connect(timer1 , SIGNAL(timeout()), this, SLOT(showDateTime()));         //connects pointer with a signal and assigns a function to slot
@@ -30,6 +34,19 @@ doro_manager::doro_manager(QWidget *parent) :
 
     activeWork=true;
     activeBreak=false;
+
+    //Database connection
+    QSqlDatabase db_con = QSqlDatabase::addDatabase("QSQLITE");
+    db_con.setDatabaseName("C:\\SQLite\\doro_data.db");  //path
+
+       if (!db_con.open())
+       {
+            ui->label_tl_pic->setText("Error: Connection with database failed.");
+       }
+       else
+       {
+            ui->label_tl_pic->setText("Database: Connection successful.");
+       }
 }
 
 
