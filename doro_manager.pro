@@ -19,5 +19,4 @@ HEADERS  += doro_manager.h
 
 FORMS    += doro_manager.ui
 
-RESOURCES += \
-    resources.qrc
+RESOURCES += resources.qrc

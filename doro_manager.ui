@@ -29,7 +29,7 @@ alternate-background-color: rgb(66, 180, 255);
 </string>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -565,6 +565,9 @@ p, li { white-space: pre-wrap; }
          <property name="text">
           <string/>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
         </widget>
        </item>
        <item>
@@ -584,10 +587,28 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="TaskListWidget"/>
+        <widget class="QListWidget" name="TaskListWidget">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>232</height>
+          </size>
+         </property>
+        </widget>
        </item>
        <item>
-        <widget class="QDateEdit" name="dateEdit"/>
+        <widget class="QDateEdit" name="dateEdit">
+         <property name="minimumDateTime">
+          <datetime>
+           <hour>0</hour>
+           <minute>0</minute>
+           <second>0</second>
+           <year>2016</year>
+           <month>1</month>
+           <day>1</day>
+          </datetime>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLineEdit" name="lineEdit"/>
@@ -676,9 +697,12 @@ p, li { white-space: pre-wrap; }
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
-        <widget class="QLabel" name="About_logo_label">
+        <widget class="QLabel" name="label_about">
          <property name="text">
-          <string>//ADD_LOGO HERE</string>
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>

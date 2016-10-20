@@ -1,6 +1,5 @@
 <RCC>
-    <qresource prefix="/Images"/>
-    <qresource prefix="/Database">
-        <file>doro_data.db</file>
+    <qresource prefix="/Images">
+        <file>Images/time_sand2.png</file>
     </qresource>
 </RCC>

@@ -53,6 +53,8 @@ private slots:                               //declared private functions
 
     void on_breakButton_clicked();
 
+    void on_AddTaskButton_clicked();
+
 private:
     Ui::doro_manager *ui;
 

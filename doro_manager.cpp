@@ -35,9 +35,14 @@ doro_manager::doro_manager(QWidget *parent) :
     activeWork=true;
     activeBreak=false;
 
+    //Added images
+    QPixmap image_logo(":/Images/Images/time_sand2.png");
+    image_logo = image_logo.scaledToWidth(ui->label_about->width(), Qt::SmoothTransformation);
+    ui->label_about->setPixmap(image_logo);
+
     //Database connection
     QSqlDatabase db_con = QSqlDatabase::addDatabase("QSQLITE");
-    db_con.setDatabaseName("C:\\SQLite\\doro_data.db");  //path
+    db_con.setDatabaseName("C:/Faks/DIPLOMSKA/Doro_Manager/doro_manager/Database/doro_data.db");  //path
 
        if (!db_con.open())
        {
@@ -47,6 +52,11 @@ doro_manager::doro_manager(QWidget *parent) :
        {
             ui->label_tl_pic->setText("Database: Connection successful.");
        }
+
+     //Show data in Calander widget and in task list, dist. list
+
+
+
 }
 
 
@@ -101,7 +111,6 @@ void doro_manager::countdown()                        //function sets countdown 
     else timeValueSec--;
 
 
-
     ui->counterLabel->setNum(timeValueMin);                         //setting the value of minutes to the label
     ui->counterLabel2->setNum(timeValueSec);                        //setting the value of seconds to the label
 }
@@ -111,10 +120,19 @@ void doro_manager::on_startButton_clicked()         //function that is run when 
     kaz->stop();                                    //stops pointer, function if active
 
     if((temporaryMin == 0)&&(temporarySec == 0)){          //checks if temporary values are zero to set values from slider
-    timeValueMin = ui->hSliderTime->value();            //sets slider values
-    ui->counterLabel->setNum(timeValueMin);
-    timeValueSec = 0;
-    ui->counterLabel2->setNum(timeValueSec);            //label for value of seconds is set primary to zero
+        //check if Work mode is active or Break mode
+        if(activeWork==true){
+                timeValueMin = ui->hSliderTime->value();            //sets slider values
+                ui->counterLabel->setNum(timeValueMin);
+                timeValueSec = 0;
+                ui->counterLabel2->setNum(timeValueSec);            //label for value of seconds is set primary to zero
+        }
+        else if(activeBreak==true){
+            timeValueMin = ui->hSliderBreak->value();            //sets slider values
+            ui->counterLabel->setNum(timeValueMin);
+            timeValueSec = 0;
+            ui->counterLabel2->setNum(timeValueSec);
+        }
     }
     else{
     timeValueMin=temporaryMin;                             //if program was paused then temporary values are used and set to the timer
@@ -124,9 +142,7 @@ void doro_manager::on_startButton_clicked()         //function that is run when 
     }
 
     kaz->start(1000);                                    //pointer starts to call a function every 1000 miliseconds
-
 }
-
 
 void doro_manager::on_resetButton_clicked()             //RESET button function resets values, also checks if break or work interval is in progress
 {
@@ -158,8 +174,6 @@ void doro_manager::on_stopButton_clicked()          //STOP button function stops
 
     kaz->stop();
 }
-
-
 
 doro_manager::~doro_manager()
 {
@@ -212,4 +226,13 @@ void doro_manager::on_breakButton_clicked()     // Pomdoro timer tab button whic
         timeValueSec = 0;
         ui->counterLabel2->setNum(timeValueSec);
     }
+
+    temporaryMin = 0;
+    temporarySec = 0;
+}
+
+void doro_manager::on_AddTaskButton_clicked()
+{
+    //On button clicked date and task should be added to the list.
+    //Refresh and show updated list based on current date
 }
