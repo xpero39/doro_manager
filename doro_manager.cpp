@@ -40,6 +40,12 @@ doro_manager::doro_manager(QWidget *parent) :
     image_logo = image_logo.scaledToWidth(ui->label_about->width(), Qt::SmoothTransformation);
     ui->label_about->setPixmap(image_logo);
 
+    image_logo = image_logo.scaledToWidth(ui->label_dl_pic->width(), Qt::SmoothTransformation);
+    ui->label_dl_pic->setPixmap(image_logo);
+
+    image_logo = image_logo.scaledToWidth(ui->label_main_pic->width(), Qt::SmoothTransformation);
+    ui->label_main_pic->setPixmap(image_logo);
+
     //Database connection
     QSqlDatabase db_con = QSqlDatabase::addDatabase("QSQLITE");
     db_con.setDatabaseName("C:/Faks/DIPLOMSKA/Doro_Manager/doro_manager/Database/doro_data.db");  //path
@@ -54,7 +60,6 @@ doro_manager::doro_manager(QWidget *parent) :
        }
 
      //Show data in Calander widget and in task list, dist. list
-
 
 
 }
@@ -235,4 +240,41 @@ void doro_manager::on_AddTaskButton_clicked()
 {
     //On button clicked date and task should be added to the list.
     //Refresh and show updated list based on current date
+}
+
+void doro_manager::on_addDistractButton_clicked()
+{
+    if(!ui->lineEdit_DistList->isModified()){
+        //DOES NOTHING IF NOT MODIFIED
+    }
+    else{
+              QSqlQuery query;
+              query.prepare("INSERT INTO dist_list(distraction) VALUES(:distraction)");
+              query.bindValue(":distraction",ui->lineEdit_DistList->text());
+
+              if(!query.exec())
+              {
+                  QMessageBox::critical(0,"Database error",query.lastError().text());
+                  qDebug() << query.lastQuery();
+              }
+              else
+              {
+                  QString distractions;
+                  QSqlQuery query2;
+                  query2.prepare("SELECT distraction FROM dist_list");
+                  query2.exec();
+                        while (query2.next()) {
+                         distractions = query2.value(0).toString();
+                         ui->textBrowser_Calander->append(distractions);
+                         qDebug() << distractions;
+                        }
+                  ui->textBrowser_Calander->setText(distractions);
+              }
+         }
+
+}
+
+void doro_manager::on_calendarWidget_selectionChanged()
+{
+    //WHEN DATE CHANGED SHOW TASK FOR SELECTED DATE
 }

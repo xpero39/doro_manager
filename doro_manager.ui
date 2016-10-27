@@ -29,7 +29,7 @@ alternate-background-color: rgb(66, 180, 255);
 </string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -41,22 +41,19 @@ alternate-background-color: rgb(66, 180, 255);
         <x>0</x>
         <y>10</y>
         <width>271</width>
-        <height>301</height>
+        <height>331</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+        <widget class="QLabel" name="label_main_pic">
+         <property name="text">
+          <string/>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
          </property>
-        </spacer>
+        </widget>
        </item>
        <item>
         <widget class="QPushButton" name="pTimerButton">
@@ -349,9 +346,9 @@ alternate-background-color: rgb(66, 180, 255);
      <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>0</x>
         <y>0</y>
-        <width>266</width>
+        <width>271</width>
         <height>349</height>
        </rect>
       </property>
@@ -533,7 +530,7 @@ alternate-background-color: rgb(66, 180, 255);
         </widget>
        </item>
        <item>
-        <widget class="QTextBrowser" name="textBrowser_2">
+        <widget class="QTextBrowser" name="textBrowser_Calander">
          <property name="html">
           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -587,7 +584,7 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="TaskListWidget">
+        <widget class="QListWidget" name="ListWidget_task">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -611,7 +608,7 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit"/>
+        <widget class="QLineEdit" name="lineEdit_TaskList"/>
        </item>
        <item>
         <widget class="QPushButton" name="AddTaskButton">
@@ -639,10 +636,20 @@ p, li { white-space: pre-wrap; }
         <x>10</x>
         <y>0</y>
         <width>258</width>
-        <height>222</height>
+        <height>351</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QLabel" name="label_dl_pic">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QLabel" name="label_2">
          <property name="font">
@@ -660,10 +667,10 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="DistractionsListWidget"/>
+        <widget class="QListWidget" name="ListWidget_fistract"/>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_2">
+        <widget class="QLineEdit" name="lineEdit_DistList">
          <property name="accessibleDescription">
           <string extracomment="Add a distraction here."/>
          </property>

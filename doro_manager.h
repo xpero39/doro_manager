@@ -55,6 +55,10 @@ private slots:                               //declared private functions
 
     void on_AddTaskButton_clicked();
 
+    void on_addDistractButton_clicked();
+
+    void on_calendarWidget_selectionChanged();
+
 private:
     Ui::doro_manager *ui;
 
