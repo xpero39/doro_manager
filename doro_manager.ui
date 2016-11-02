@@ -394,12 +394,21 @@ alternate-background-color: rgb(66, 180, 255);
               </color>
              </brush>
             </colorrole>
-            <colorrole role="HighlightedText">
+            <colorrole role="Highlight">
              <brush brushstyle="SolidPattern">
               <color alpha="255">
                <red>0</red>
+               <green>85</green>
+               <blue>255</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="HighlightedText">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>255</red>
                <green>255</green>
-               <blue>0</blue>
+               <blue>255</blue>
               </color>
              </brush>
             </colorrole>
@@ -450,12 +459,21 @@ alternate-background-color: rgb(66, 180, 255);
               </color>
              </brush>
             </colorrole>
-            <colorrole role="HighlightedText">
+            <colorrole role="Highlight">
              <brush brushstyle="SolidPattern">
               <color alpha="255">
                <red>0</red>
+               <green>85</green>
+               <blue>255</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="HighlightedText">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>255</red>
                <green>255</green>
-               <blue>0</blue>
+               <blue>255</blue>
               </color>
              </brush>
             </colorrole>
@@ -506,12 +524,21 @@ alternate-background-color: rgb(66, 180, 255);
               </color>
              </brush>
             </colorrole>
-            <colorrole role="HighlightedText">
+            <colorrole role="Highlight">
              <brush brushstyle="SolidPattern">
               <color alpha="255">
                <red>0</red>
+               <green>85</green>
+               <blue>255</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="HighlightedText">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>255</red>
                <green>255</green>
-               <blue>0</blue>
+               <blue>255</blue>
               </color>
              </brush>
             </colorrole>
@@ -527,7 +554,14 @@ alternate-background-color: rgb(66, 180, 255);
            </disabled>
           </palette>
          </property>
+         <property name="styleSheet">
+          <string notr="true">selection-background-color: rgb(0, 85, 255);
+selection-color: rgb(255, 255, 255);</string>
+         </property>
         </widget>
+       </item>
+       <item>
+        <widget class="QTableView" name="tableView_Calendar"/>
        </item>
        <item>
         <widget class="QTextBrowser" name="textBrowser_Calander">
@@ -633,9 +667,9 @@ p, li { white-space: pre-wrap; }
      <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>0</x>
         <y>0</y>
-        <width>258</width>
+        <width>271</width>
         <height>351</height>
        </rect>
       </property>
@@ -696,10 +730,10 @@ p, li { white-space: pre-wrap; }
      <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>9</y>
-        <width>258</width>
-        <height>331</height>
+        <x>0</x>
+        <y>0</y>
+        <width>271</width>
+        <height>351</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_6">

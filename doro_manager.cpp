@@ -1,17 +1,5 @@
 #include "doro_manager.h"
 #include "ui_doro_manager.h"
-#include <QTime>
-#include <QDate>
-#include <QString>
-#include <QTimer>
-#include <QApplication>
-#include <QStyleFactory>
-
-#include <QtSql>
-#include <QtDebug>
-
-#include <QMessageBox>
-#include <QFile>
 
 doro_manager::doro_manager(QWidget *parent) :
     QMainWindow(parent),
@@ -21,16 +9,18 @@ doro_manager::doro_manager(QWidget *parent) :
 
     QApplication::setStyle(QStyleFactory::create("Fusion"));
 
-    this->timer1= new QTimer(this);                                         //pointer for Main Tab showing time and date
+    this->timer1 = new QTimer(this);                                         //pointer for Main Tab showing time and date
     connect(timer1 , SIGNAL(timeout()), this, SLOT(showDateTime()));         //connects pointer with a signal and assigns a function to slot
     timer1->start(1000);                                            //starts a function with a pointer and calls it every 1000 miliseconds
 
-    this->timer= new QTimer(this);
+    this->timer = new QTimer(this);
     connect(timer , SIGNAL(timeout()), this, SLOT(showTime()));     //pointer for Timer Tab showing time
     timer->start(1000);
 
     this->kaz = new QTimer(this);
     connect(kaz , SIGNAL(timeout()), this, SLOT(countdown()));         //inicialization of a pointer and links it to a function to countdown
+
+    this->sound = new QSound("C:/Faks/DIPLOMSKA/Doro_Manager/doro_manager/Sounds/sound_alert.wav");
 
     activeWork=true;
     activeBreak=false;
@@ -50,18 +40,20 @@ doro_manager::doro_manager(QWidget *parent) :
     QSqlDatabase db_con = QSqlDatabase::addDatabase("QSQLITE");
     db_con.setDatabaseName("C:/Faks/DIPLOMSKA/Doro_Manager/doro_manager/Database/doro_data.db");  //path
 
-       if (!db_con.open())
-       {
+       if (!db_con.open()){
             ui->label_tl_pic->setText("Error: Connection with database failed.");
        }
-       else
-       {
+       else {
             ui->label_tl_pic->setText("Database: Connection successful.");
        }
 
-     //Show data in Calander widget and in task list, dist. list
-
-
+     //Show data in Calender widget and in task list, dist. list
+     QSqlQueryModel *model = new QSqlQueryModel();
+     QSqlQuery query;
+     query.prepare("SELECT distraction FROM dist_list");
+     query.exec();
+     model->setQuery(query);
+     ui->tableView_Calendar->setModel(model);
 }
 
 
@@ -80,7 +72,6 @@ void doro_manager::showTime()                   //method to show current time
 {
     QTime time = QTime::currentTime();
     QString text = time.toString("hh : mm : ss");
-
     ui->clockLabel->setText(text);
 
 }
@@ -105,7 +96,7 @@ void doro_manager::countdown()                        //function sets countdown 
            timeValueSec = 0;
            ui->counterLabel2->setNum(timeValueSec);
        }
-            //player->play();                                       //pointer calls a function to play a sound
+        sound->play();                                       //pointer calls a function to play a alert sound
     }
 
     if (timeValueSec == 0)                                          //if loop checks if the value of seconds is 0 and changes it to 59 if true
@@ -168,7 +159,6 @@ void doro_manager::on_resetButton_clicked()             //RESET button function 
 
 void doro_manager::on_infoButton_clicked()          //function for INFO button provides us a information about pomodoro tehnique
 {
-    //QMessageBox::information(this, tr("Kaj je pomodoro tehnika?"), tr("<p>The <b>Pomodoro Technique</b> is a time management method developed by Francesco Cirillo in the late 1980s.[1] The technique uses a timer to break down work into intervals, <b>traditionally 25 minutes in length</b>, separated by short breaks. These intervals are called <i>pomodoros</i>, the plural in English of the Italian word <i>pomodoro</i>, which means tomato.[2] The method is based on the idea that <b>frequent breaks can improve mental agility</b>.[3][4]</p><p>Closely related to concepts such as <b>timeboxing</b> and iterative and incremental development used in software design, the method has been adopted in pair programming contexts.[5]</p><p>Vir: https://en.wikipedia.org/wiki/Pomodoro_Technique</p>"));
     ui->tabWidget->setCurrentIndex(5);
 }
 
@@ -248,6 +238,7 @@ void doro_manager::on_addDistractButton_clicked()
         //DOES NOTHING IF NOT MODIFIED
     }
     else{
+            QSqlQueryModel *model = new QSqlQueryModel();
               QSqlQuery query;
               query.prepare("INSERT INTO dist_list(distraction) VALUES(:distraction)");
               query.bindValue(":distraction",ui->lineEdit_DistList->text());
@@ -259,16 +250,17 @@ void doro_manager::on_addDistractButton_clicked()
               }
               else
               {
-                  QString distractions;
-                  QSqlQuery query2;
-                  query2.prepare("SELECT distraction FROM dist_list");
-                  query2.exec();
-                        while (query2.next()) {
-                         distractions = query2.value(0).toString();
-                         ui->textBrowser_Calander->append(distractions);
+                  //QString distractions;
+                  //QSqlQuery query;
+                  query.prepare("SELECT distraction FROM dist_list");
+                  query.exec();
+                  model->setQuery(query);
+                  ui->tableView_Calendar->setModel(model);
+                  /*      while (query.next()) {
+                         distractions = query.value(0).toString();
                          qDebug() << distractions;
                         }
-                  ui->textBrowser_Calander->setText(distractions);
+                   ui->textBrowser_Calander->append(distractions); */
               }
          }
 

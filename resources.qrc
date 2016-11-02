@@ -2,4 +2,7 @@
     <qresource prefix="/Images">
         <file>Images/time_sand2.png</file>
     </qresource>
+    <qresource prefix="/Sounds">
+        <file>Sounds/sound_alert.wav</file>
+    </qresource>
 </RCC>

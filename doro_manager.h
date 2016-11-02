@@ -3,6 +3,20 @@
 
 #include <QMainWindow>
 
+#include <QTime>
+#include <QDate>
+#include <QString>
+#include <QTimer>
+#include <QApplication>
+#include <QStyleFactory>
+#include <QSound>
+
+#include <QtSql>
+#include <QtDebug>
+
+#include <QMessageBox>
+#include <QFile>
+
 namespace Ui {
 class doro_manager;
 }
@@ -65,6 +79,7 @@ private:
     QTimer *timer;                          //declared pointers
     QTimer *timer1;
     QTimer *kaz;
+    QSound *sound;
 };
 
 #endif // DORO_MANAGER_H
