@@ -73,6 +73,8 @@ private slots:                               //declared private functions
 
     void on_calendarWidget_selectionChanged();
 
+    void on_removeDistButton_clicked();
+
 private:
     Ui::doro_manager *ui;
 
@@ -80,6 +82,7 @@ private:
     QTimer *timer1;
     QTimer *kaz;
     QSound *sound;
+    //QStringListModel *listmodel;
 };
 
 #endif // DORO_MANAGER_H

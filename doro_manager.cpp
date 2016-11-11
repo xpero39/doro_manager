@@ -36,15 +36,18 @@ doro_manager::doro_manager(QWidget *parent) :
     image_logo = image_logo.scaledToWidth(ui->label_main_pic->width(), Qt::SmoothTransformation);
     ui->label_main_pic->setPixmap(image_logo);
 
+    image_logo = image_logo.scaledToWidth(ui->label_tl_pic->width(), Qt::SmoothTransformation);
+    ui->label_tl_pic->setPixmap(image_logo);
+
     //Database connection
     QSqlDatabase db_con = QSqlDatabase::addDatabase("QSQLITE");
     db_con.setDatabaseName("C:/Faks/DIPLOMSKA/Doro_Manager/doro_manager/Database/doro_data.db");  //path
 
        if (!db_con.open()){
-            ui->label_tl_pic->setText("Error: Connection with database failed.");
+            ui->textBrowser_Calander->setText("Error: Connection with database failed.");
        }
        else {
-            ui->label_tl_pic->setText("Database: Connection successful.");
+            ui->textBrowser_Calander->setText("Database: Connection successful.");
        }
 
      //Show data in Calender widget and in task list, dist. list
@@ -53,7 +56,7 @@ doro_manager::doro_manager(QWidget *parent) :
      query.prepare("SELECT distraction FROM dist_list");
      query.exec();
      model->setQuery(query);
-     ui->tableView_Calendar->setModel(model);
+     ui->listView_distraction->setModel(model);
 }
 
 
@@ -238,7 +241,7 @@ void doro_manager::on_addDistractButton_clicked()
         //DOES NOTHING IF NOT MODIFIED
     }
     else{
-            QSqlQueryModel *model = new QSqlQueryModel();
+              QSqlQueryModel *model = new QSqlQueryModel();
               QSqlQuery query;
               query.prepare("INSERT INTO dist_list(distraction) VALUES(:distraction)");
               query.bindValue(":distraction",ui->lineEdit_DistList->text());
@@ -250,17 +253,10 @@ void doro_manager::on_addDistractButton_clicked()
               }
               else
               {
-                  //QString distractions;
-                  //QSqlQuery query;
                   query.prepare("SELECT distraction FROM dist_list");
                   query.exec();
                   model->setQuery(query);
-                  ui->tableView_Calendar->setModel(model);
-                  /*      while (query.next()) {
-                         distractions = query.value(0).toString();
-                         qDebug() << distractions;
-                        }
-                   ui->textBrowser_Calander->append(distractions); */
+                  ui->listView_distraction->setModel(model);
               }
          }
 
@@ -269,4 +265,36 @@ void doro_manager::on_addDistractButton_clicked()
 void doro_manager::on_calendarWidget_selectionChanged()
 {
     //WHEN DATE CHANGED SHOW TASK FOR SELECTED DATE
+}
+
+void doro_manager::on_removeDistButton_clicked()
+{
+    /*
+     if(ui->listView_distraction->currentIndex().count() != 0)
+    {
+        int index[] = ui->listView_distraction->selectedIndexes();
+
+        while (index[].next())
+        {
+            for(int i=0; i<=index[].length(); i++) {
+                QSqlQueryModel *model = new QSqlQueryModel();
+                QSqlQuery query;
+                query.prepare("DELETE FROM dist_list(distraction) VALUES(:distItem)");
+                query.bindValue(":distItem", i);
+
+                if(!query.exec())
+                {
+                    QMessageBox::critical(0,"Database error",query.lastError().text());
+                    qDebug() << query.lastQuery();
+                }
+                else
+                {
+                    query.prepare("SELECT distraction FROM dist_list");
+                    query.exec();
+                    model->setQuery(query);
+                    ui->listView_distraction->setModel(model);
+                }
+            }
+        }
+    */
 }
