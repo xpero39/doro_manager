@@ -29,7 +29,7 @@ alternate-background-color: rgb(66, 180, 255);
 </string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -710,13 +710,6 @@ p, li { white-space: pre-wrap; }
          </property>
          <property name="text">
           <string>ADD A DISTRACTION</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="removeDistButton">
-         <property name="text">
-          <string>REMOVE A DISTRACTION</string>
          </property>
         </widget>
        </item>

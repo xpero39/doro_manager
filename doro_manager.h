@@ -2,7 +2,6 @@
 #define DORO_MANAGER_H
 
 #include <QMainWindow>
-
 #include <QTime>
 #include <QDate>
 #include <QString>
@@ -10,10 +9,8 @@
 #include <QApplication>
 #include <QStyleFactory>
 #include <QSound>
-
 #include <QtSql>
 #include <QtDebug>
-
 #include <QMessageBox>
 #include <QFile>
 
@@ -71,9 +68,9 @@ private slots:                               //declared private functions
 
     void on_addDistractButton_clicked();
 
-    void on_calendarWidget_selectionChanged();
+    void on_calendarWidget_clicked(const QDate &date);
 
-    void on_removeDistButton_clicked();
+   // void on_dateEdit_dateChanged(const QDate &date);
 
 private:
     Ui::doro_manager *ui;
@@ -82,7 +79,15 @@ private:
     QTimer *timer1;
     QTimer *kaz;
     QSound *sound;
+    QSqlQueryModel *distmodel;
+    QSqlQueryModel *taskmodel;
+    QSqlQueryModel *calmodel;   //Calander tab task model
     //QStringListModel *listmodel;
+
+    //QSqlDatabase db_con;
+    //QSqlQuery query;
+
+
 };
 
 #endif // DORO_MANAGER_H
