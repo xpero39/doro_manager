@@ -15,9 +15,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        doro_manager.cpp
+        doro_manager.cpp \
+    checkbox_model.cpp
 
-HEADERS  += doro_manager.h
+HEADERS  += doro_manager.h \
+    checkbox_model.h
 
 FORMS    += doro_manager.ui
 

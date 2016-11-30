@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>278</width>
-    <height>428</height>
+    <width>277</width>
+    <height>431</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,7 +29,7 @@ alternate-background-color: rgb(66, 180, 255);
 </string>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -146,9 +146,9 @@ alternate-background-color: rgb(66, 180, 255);
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-10</y>
-        <width>278</width>
-        <height>356</height>
+        <y>0</y>
+        <width>271</width>
+        <height>351</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -349,7 +349,7 @@ alternate-background-color: rgb(66, 180, 255);
         <x>0</x>
         <y>0</y>
         <width>271</width>
-        <height>349</height>
+        <height>368</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -561,7 +561,11 @@ selection-color: rgb(255, 255, 255);</string>
         </widget>
        </item>
        <item>
-        <widget class="QTableView" name="tableView_Calendar"/>
+        <widget class="QTableView" name="tableView_Calendar">
+         <property name="styleSheet">
+          <string notr="true">text-align:center;</string>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QTextBrowser" name="textBrowser_Calander">
@@ -621,7 +625,7 @@ p, li { white-space: pre-wrap; }
         <widget class="QListView" name="listView_task"/>
        </item>
        <item>
-        <widget class="QDateEdit" name="dateEdit">
+        <widget class="QDateEdit" name="dateEditTaskList">
          <property name="minimumDateTime">
           <datetime>
            <hour>0</hour>
@@ -713,6 +717,16 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QPushButton" name="clearTheListButton">
+         <property name="styleSheet">
+          <string notr="true">.QPushButton {background-color: rgb(255, 170, 127); }</string>
+         </property>
+         <property name="text">
+          <string>CLEAR THE LIST</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -770,7 +784,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>278</width>
+     <width>277</width>
      <height>21</height>
     </rect>
    </property>

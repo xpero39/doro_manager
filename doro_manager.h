@@ -13,6 +13,10 @@
 #include <QtDebug>
 #include <QMessageBox>
 #include <QFile>
+#include <QVariant>
+#include <QModelIndex>
+#include <QCheckBox>
+#include "checkbox_model.h"
 
 namespace Ui {
 class doro_manager;
@@ -28,7 +32,6 @@ class doro_manager : public QMainWindow
     int timeValueSec;
     int temporaryMin;
     int temporarySec;
-
 
 public:
     explicit doro_manager(QWidget *parent = 0);
@@ -70,7 +73,9 @@ private slots:                               //declared private functions
 
     void on_calendarWidget_clicked(const QDate &date);
 
-   // void on_dateEdit_dateChanged(const QDate &date);
+    void on_dateEditTaskList_dateChanged(const QDate &date);
+
+    void on_clearTheListButton_clicked();
 
 private:
     Ui::doro_manager *ui;
@@ -81,12 +86,8 @@ private:
     QSound *sound;
     QSqlQueryModel *distmodel;
     QSqlQueryModel *taskmodel;
-    QSqlQueryModel *calmodel;   //Calander tab task model
-    //QStringListModel *listmodel;
-
-    //QSqlDatabase db_con;
-    //QSqlQuery query;
-
+    checkbox_model *calmodel;
+   // QSqlQueryModel *calmodel;   //Calander tab task model
 
 };
 

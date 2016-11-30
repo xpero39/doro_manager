@@ -1,3 +1,4 @@
+#include "checkbox_model.h"
 #include "doro_manager.h"
 #include "ui_doro_manager.h"
 
@@ -20,11 +21,12 @@ doro_manager::doro_manager(QWidget *parent) :
     this->kaz = new QTimer(this);
     connect(kaz, SIGNAL(timeout()), this, SLOT(countdown()));         //inicialization of a pointer and links it to a function to countdown
 
-    this->sound = new QSound("C:/Faks/DIPLOMSKA/Doro_Manager/doro_manager/Sounds/sound_alert.wav");
+    //this->sound = new QSound("C:/Faks/DIPLOMSKA/Doro_Manager/doro_manager/Sounds/sound_alert.wav");
+    this->sound = new QSound(":Sounds/Sounds/sound_alert.wav");
 
     //Setting current date to dateEdit widget in Task tab
     QDate date = QDate::currentDate();
-    ui->dateEdit->setDate(date);
+    ui->dateEditTaskList->setDate(date);
 
     //Setting Timer state to be primary Active Work
     activeWork=true;
@@ -45,14 +47,20 @@ doro_manager::doro_manager(QWidget *parent) :
     ui->label_tl_pic->setPixmap(image_logo);
 
     //Database connection
+    QString dir_path = QCoreApplication::applicationDirPath(); //Gets directory of the executable
+    //dir_path.remove(position number,length number);
+   // dir_path.replace(45,5,"/Database/doro_data.db");
     QSqlDatabase db_con = QSqlDatabase::addDatabase("QSQLITE");
-    db_con.setDatabaseName("C:/Faks/DIPLOMSKA/Doro_Manager/doro_manager/Database/doro_data.db");  //path
+    //db_con.setDatabaseName("C:/Faks/DIPLOMSKA/Doro_Manager/doro_manager/Database/doro_data.db");  //path
+    db_con.setDatabaseName(dir_path +"/Database/doro_data.db");
+
+    ui->textBrowser_Calander->setText(dir_path + "/Database/doro_data.db");
 
        if (!db_con.open()){
-            ui->textBrowser_Calander->setText("Error: Connection with database failed.");
+            ui->textBrowser_Calander->append("Error: Connection with database failed.");
        }
        else {
-            ui->textBrowser_Calander->setText("Database: Connection successful.");
+            ui->textBrowser_Calander->append("Database: Connection successful.");
        }
 
      //Show data in Calender widget and in task list, dist. list
@@ -63,11 +71,14 @@ doro_manager::doro_manager(QWidget *parent) :
      distmodel->setQuery(query);
      ui->listView_distraction->setModel(distmodel);
 
-     calmodel = new QSqlQueryModel(this);
-     query.prepare("SELECT task, finished FROM task_list WHERE date = :date");
+     calmodel = new checkbox_model(this);
+     query.prepare("SELECT id,task, finished FROM task_list WHERE date = :date");
      query.bindValue(":date", date);
      query.exec();
      calmodel->setQuery(query);
+     calmodel->setHeaderData(0, Qt::Horizontal, tr("ID"));
+     calmodel->setHeaderData(1, Qt::Horizontal, tr("TASK"));
+     calmodel->setHeaderData(2, Qt::Horizontal, tr("FINISHED"));
      ui->tableView_Calendar->setModel(calmodel);
 
      taskmodel = new QSqlQueryModel(this);
@@ -76,10 +87,10 @@ doro_manager::doro_manager(QWidget *parent) :
      query.exec();
      taskmodel->setQuery(query);
      ui->listView_task->setModel(taskmodel);
-     //db_con.close();
 }
 
 
+//METHODS AND BUTTONS SIGNALS
 void doro_manager::showDateTime()                   //method to show current date and time
 {
     QTime time = QTime::currentTime();
@@ -101,7 +112,7 @@ void doro_manager::showTime()                   //method to show current time
 
 void doro_manager::countdown()                        //function sets countdown timer value depending on work/break interwall and subtracts time
 {
-   if ((timeValueMin == 0) && (timeValueSec == 0))                  //loop checks if the countdown ended to switch work and break time intervals
+    if ((timeValueMin == 0) && (timeValueSec == 0))                  //loop checks if the countdown ended to switch work and break time intervals
     {
        if(activeWork==true){
        activeWork=false;
@@ -193,11 +204,6 @@ void doro_manager::on_stopButton_clicked()          //STOP button function stops
     kaz->stop();
 }
 
-doro_manager::~doro_manager()
-{
-    delete ui;
-}
-
 void doro_manager::on_pTimerButton_clicked()        //Main tab button which shows Pomodoro timer tab
 {
     ui->tabWidget->setCurrentIndex(1);
@@ -255,13 +261,10 @@ void doro_manager::on_AddTaskButton_clicked()
          //DOES NOTHING IF NOT MODIFIED
     }
     else {
-      //  QSqlDatabase db_con = QSqlDatabase::addDatabase("QSQLITE");
-      //  db_con.setDatabaseName("C:/Faks/DIPLOMSKA/Doro_Manager/doro_manager/Database/doro_data.db");  //path
-     //   db_con.open();
         QSqlQuery query;
         query.prepare("INSERT INTO task_list(date,task) VALUES(:date,:task)");
         query.bindValue(":task",ui->lineEdit_TaskList->text());
-        query.bindValue(":date",ui->dateEdit->date());
+        query.bindValue(":date",ui->dateEditTaskList->date());
 
         if(!query.exec())
         {
@@ -270,14 +273,13 @@ void doro_manager::on_AddTaskButton_clicked()
         }
         else
         {
-            QDate date = QDate::currentDate();
+            QDate date = ui->dateEditTaskList->date();
             query.prepare("SELECT task FROM task_list WHERE date = :date");
             query.bindValue(":date", date);
             query.exec();
             taskmodel->setQuery(query);
             ui->listView_task->setModel(taskmodel);
         }
-      //  db_con.close();
     }
 }
 
@@ -287,9 +289,6 @@ void doro_manager::on_addDistractButton_clicked()
         //DOES NOTHING IF NOT MODIFIED
     }
     else{
-          //    QSqlDatabase db_con = QSqlDatabase::addDatabase("QSQLITE");
-          //    db_con.setDatabaseName("C:/Faks/DIPLOMSKA/Doro_Manager/doro_manager/Database/doro_data.db");  //path
-          //    db_con.open();
               QSqlQuery query;
               query.prepare("INSERT INTO dist_list(distraction) VALUES(:distraction)");
               query.bindValue(":distraction",ui->lineEdit_DistList->text());
@@ -306,67 +305,56 @@ void doro_manager::on_addDistractButton_clicked()
                   distmodel->setQuery(query);
                   ui->listView_distraction->setModel(distmodel);
               }
-            //  db_con.close();
          }
 
 }
 
-void doro_manager::on_calendarWidget_clicked(const QDate &date)
+void doro_manager::on_calendarWidget_clicked(const QDate &date) //WHEN DATE CHANGED SHOW TASKS FOR SELECTED DATE
 {
-    //WHEN DATE CHANGED SHOW TASK FOR SELECTED DATE
-    //QDate date = ui->calendarWidget->selectedDate();
-    //db_con.open();
     QSqlQuery query;
-    query.prepare("SELECT task, finished FROM task_list WHERE date = :date");
+    query.prepare("SELECT id, task, finished FROM task_list WHERE date = :date");
     query.bindValue(":date", date);
     query.exec();
-    calmodel->setQuery(query);
-    ui->tableView_Calendar->setModel(calmodel);
-    //db_con.close();
+    //calmodel->setQuery(query);
+    //ui->tableView_Calendar->setModel(calmodel);
 }
 
-/* void doro_manager::on_dateEdit_dateChanged(const QDate &date)
+void doro_manager::on_dateEditTaskList_dateChanged(const QDate &date)
 {
     QSqlQuery query;
     query.prepare("SELECT task FROM task_list WHERE date = :date");
     query.bindValue(":date", date);
-    query.exec();
+    if(!query.exec()){
+        QMessageBox::critical(0,"Database error",query.lastError().text());
+        qDebug() << query.lastQuery();
+    }
+    else {
     taskmodel->setQuery(query);
     ui->listView_task->setModel(taskmodel);
-}*/
+    }
+}
 
-class MyModel : public QSqlQueryModel
+void doro_manager::on_clearTheListButton_clicked()
 {
-public:
+    QSqlQuery query;
+    query.prepare("DELETE FROM dist_list");
 
-    Qt::ItemFlags flags(const QModelIndex & index) const
+    if(!query.exec())
     {
-        if(index.column() == 0)
-             return QSqlQueryModel::flags(index) | Qt::ItemIsUserCheckable;
-        return QSqlQueryModel::flags(index);
+        QMessageBox::critical(0,"Database error",query.lastError().text());
+        qDebug() << query.lastQuery();
+    }
+    else
+    {
+        query.prepare("SELECT distraction FROM dist_list");
+        query.exec();
+        distmodel->setQuery(query);
+        ui->listView_distraction->setModel(distmodel);
     }
 
-    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const
-    {
-        if(index.column() == 0 && role == Qt::CheckStateRole)
-        {
-            //implement your logic to return the check state
-            //....
-        }
-        else
-            return QSqlQueryModel::data(index, role);
-    }
+}
 
-    bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole)
-    {
-        if(index.column() == 0 && role == Qt::CheckStateRole)
-        {
-            //implement your logic to set the check state
-            //....
-        }
-        else
-            QSqlQueryModel::setData(index, value, role);
-    }
-};
-
-
+doro_manager::~doro_manager()
+{
+    delete ui;
+}
