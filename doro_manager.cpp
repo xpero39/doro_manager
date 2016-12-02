@@ -1,5 +1,6 @@
-#include "checkbox_model.h"
+//#include "checkbox_model.h"
 #include "doro_manager.h"
+//#include "connection.h"
 #include "ui_doro_manager.h"
 
 doro_manager::doro_manager(QWidget *parent) :
@@ -46,7 +47,7 @@ doro_manager::doro_manager(QWidget *parent) :
     image_logo = image_logo.scaledToWidth(ui->label_tl_pic->width(), Qt::SmoothTransformation);
     ui->label_tl_pic->setPixmap(image_logo);
 
-    //Database connection
+   /* //Database connection
     QString dir_path = QCoreApplication::applicationDirPath(); //Gets directory of the executable
     //dir_path.remove(position number,length number);
    // dir_path.replace(45,5,"/Database/doro_data.db");
@@ -62,7 +63,7 @@ doro_manager::doro_manager(QWidget *parent) :
        else {
             ui->textBrowser_Calander->append("Database: Connection successful.");
        }
-
+*/
      //Show data in Calender widget and in task list, dist. list
      distmodel = new QSqlQueryModel(this);
      QSqlQuery query;
@@ -71,7 +72,7 @@ doro_manager::doro_manager(QWidget *parent) :
      distmodel->setQuery(query);
      ui->listView_distraction->setModel(distmodel);
 
-     calmodel = new checkbox_model(this);
+     /*calmodel = new checkbox_model(this);
      query.prepare("SELECT id,task, finished FROM task_list WHERE date = :date");
      query.bindValue(":date", date);
      query.exec();
@@ -79,7 +80,7 @@ doro_manager::doro_manager(QWidget *parent) :
      calmodel->setHeaderData(0, Qt::Horizontal, tr("ID"));
      calmodel->setHeaderData(1, Qt::Horizontal, tr("TASK"));
      calmodel->setHeaderData(2, Qt::Horizontal, tr("FINISHED"));
-     ui->tableView_Calendar->setModel(calmodel);
+     ui->tableView_Calendar->setModel(calmodel);*/
 
      taskmodel = new QSqlQueryModel(this);
      query.prepare("SELECT task FROM task_list WHERE date = :date");
@@ -268,7 +269,7 @@ void doro_manager::on_AddTaskButton_clicked()
 
         if(!query.exec())
         {
-                QMessageBox::critical(0,"Database error",query.lastError().text());
+                QMessageBox::critical(0,"Database error.",query.lastError().text());
                 qDebug() << query.lastQuery();
         }
         else
@@ -295,7 +296,7 @@ void doro_manager::on_addDistractButton_clicked()
 
               if(!query.exec())
               {
-                  QMessageBox::critical(0,"Database error",query.lastError().text());
+                  QMessageBox::critical(0,"Database error.",query.lastError().text());
                   qDebug() << query.lastQuery();
               }
               else
@@ -309,6 +310,22 @@ void doro_manager::on_addDistractButton_clicked()
 
 }
 
+void doro_manager::on_dateEditTaskList_dateChanged(const QDate &date)
+{
+    QDate date2 = ui->dateEditTaskList->date();
+    QSqlQuery query;
+    query.prepare("SELECT task FROM task_list WHERE date = :date");
+    query.bindValue(":date", date2);
+    if(!query.exec()){
+        QMessageBox::critical(0,"Database error.",query.lastError().text());
+        qDebug() << query.lastQuery();
+    }
+    else {
+       taskmodel->setQuery(query);
+       ui->listView_task->setModel(taskmodel);
+    }
+}
+
 void doro_manager::on_calendarWidget_clicked(const QDate &date) //WHEN DATE CHANGED SHOW TASKS FOR SELECTED DATE
 {
     QSqlQuery query;
@@ -317,21 +334,6 @@ void doro_manager::on_calendarWidget_clicked(const QDate &date) //WHEN DATE CHAN
     query.exec();
     //calmodel->setQuery(query);
     //ui->tableView_Calendar->setModel(calmodel);
-}
-
-void doro_manager::on_dateEditTaskList_dateChanged(const QDate &date)
-{
-    QSqlQuery query;
-    query.prepare("SELECT task FROM task_list WHERE date = :date");
-    query.bindValue(":date", date);
-    if(!query.exec()){
-        QMessageBox::critical(0,"Database error",query.lastError().text());
-        qDebug() << query.lastQuery();
-    }
-    else {
-    taskmodel->setQuery(query);
-    ui->listView_task->setModel(taskmodel);
-    }
 }
 
 void doro_manager::on_clearTheListButton_clicked()

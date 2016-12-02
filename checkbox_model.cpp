@@ -38,20 +38,20 @@ bool checkbox_model::setData(const QModelIndex &index, const QVariant &value, in
 {
     QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
     int id = QSqlQueryModel::data(primaryKeyIndex).toInt();
-    clear();
+   // clear();
+    bool ok;
     //if(index.column() == 2 && role == Qt::CheckStateRole)
     if(index.column() == 2)
     {
-            bool ok;
             ok = setCheckbox(id, value.toInt());
-            return ok;
     }
-    else
+    /*else
     {
             return false;
             //QSqlQueryModel::setData(index, value, role);
-    }
-        return true;
+    }*/
+    //refresh();
+    return ok;
 }
 
 
@@ -63,3 +63,13 @@ bool checkbox_model::setCheckbox(int task_id, int checkbox_value)
             query.bindValue(":id", task_id);
             return query.exec();
 }
+
+/*void checkbox_model::refresh(QSqlQueryModel *model)
+{
+    model->setQuery("SELECT id, task, finished FROM task_list WHERE date = :date");
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("TASK"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("FINISHED"));
+
+}
+*/

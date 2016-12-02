@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     checkbox_model.cpp
 
 HEADERS  += doro_manager.h \
-    checkbox_model.h
+    checkbox_model.h \
+    connection.h
 
 FORMS    += doro_manager.ui
 

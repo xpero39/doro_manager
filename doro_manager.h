@@ -32,6 +32,7 @@ class doro_manager : public QMainWindow
     int timeValueSec;
     int temporaryMin;
     int temporarySec;
+    //QSqlQuery query;
 
 public:
     explicit doro_manager(QWidget *parent = 0);
@@ -73,9 +74,9 @@ private slots:                               //declared private functions
 
     void on_calendarWidget_clicked(const QDate &date);
 
-    void on_dateEditTaskList_dateChanged(const QDate &date);
-
     void on_clearTheListButton_clicked();
+
+    void on_dateEditTaskList_dateChanged(const QDate &date);
 
 private:
     Ui::doro_manager *ui;
@@ -86,7 +87,8 @@ private:
     QSound *sound;
     QSqlQueryModel *distmodel;
     QSqlQueryModel *taskmodel;
-    checkbox_model *calmodel;
+    //QSqlQueryModel *taskmodel2;
+   // checkbox_model *calmodel;
    // QSqlQueryModel *calmodel;   //Calander tab task model
 
 };
