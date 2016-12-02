@@ -1,6 +1,7 @@
 #ifndef DORO_MANAGER_H
 #define DORO_MANAGER_H
 
+#include "delegate.h"
 #include <QMainWindow>
 #include <QTime>
 #include <QDate>
@@ -15,8 +16,12 @@
 #include <QFile>
 #include <QVariant>
 #include <QModelIndex>
-#include <QCheckBox>
-#include "checkbox_model.h"
+//#include <QCheckBox>
+
+
+
+//#include <QtCore>
+//#include <QtGui>
 
 namespace Ui {
 class doro_manager;
@@ -72,11 +77,11 @@ private slots:                               //declared private functions
 
     void on_addDistractButton_clicked();
 
+   // void on_dateEdit_dateChanged(const QDate &date);
+
     void on_calendarWidget_clicked(const QDate &date);
 
     void on_clearTheListButton_clicked();
-
-    void on_dateEditTaskList_dateChanged(const QDate &date);
 
 private:
     Ui::doro_manager *ui;
@@ -89,8 +94,9 @@ private:
     QSqlQueryModel *taskmodel;
     //QSqlQueryModel *taskmodel2;
    // checkbox_model *calmodel;
-   // QSqlQueryModel *calmodel;   //Calander tab task model
+    QSqlQueryModel *calmodel; //Calander tab task model
 
+    delegate *mydelegate;
 };
 
 #endif // DORO_MANAGER_H

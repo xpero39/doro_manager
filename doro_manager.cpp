@@ -1,6 +1,4 @@
-//#include "checkbox_model.h"
 #include "doro_manager.h"
-//#include "connection.h"
 #include "ui_doro_manager.h"
 
 doro_manager::doro_manager(QWidget *parent) :
@@ -27,7 +25,7 @@ doro_manager::doro_manager(QWidget *parent) :
 
     //Setting current date to dateEdit widget in Task tab
     QDate date = QDate::currentDate();
-    ui->dateEditTaskList->setDate(date);
+    ui->dateEdit->setDate(date);
 
     //Setting Timer state to be primary Active Work
     activeWork=true;
@@ -65,6 +63,7 @@ doro_manager::doro_manager(QWidget *parent) :
        }
 */
      //Show data in Calender widget and in task list, dist. list
+
      distmodel = new QSqlQueryModel(this);
      QSqlQuery query;
      query.prepare("SELECT distraction FROM dist_list");
@@ -72,7 +71,9 @@ doro_manager::doro_manager(QWidget *parent) :
      distmodel->setQuery(query);
      ui->listView_distraction->setModel(distmodel);
 
-     /*calmodel = new checkbox_model(this);
+     mydelegate = new delegate(this);
+
+     calmodel = new QSqlQueryModel(this);
      query.prepare("SELECT id,task, finished FROM task_list WHERE date = :date");
      query.bindValue(":date", date);
      query.exec();
@@ -80,7 +81,9 @@ doro_manager::doro_manager(QWidget *parent) :
      calmodel->setHeaderData(0, Qt::Horizontal, tr("ID"));
      calmodel->setHeaderData(1, Qt::Horizontal, tr("TASK"));
      calmodel->setHeaderData(2, Qt::Horizontal, tr("FINISHED"));
-     ui->tableView_Calendar->setModel(calmodel);*/
+     ui->tableView_Calendar->setModel(calmodel);
+     //SET ITEM DELEGATE
+     ui->tableView_Calendar->setItemDelegate(mydelegate);
 
      taskmodel = new QSqlQueryModel(this);
      query.prepare("SELECT task FROM task_list WHERE date = :date");
@@ -265,7 +268,7 @@ void doro_manager::on_AddTaskButton_clicked()
         QSqlQuery query;
         query.prepare("INSERT INTO task_list(date,task) VALUES(:date,:task)");
         query.bindValue(":task",ui->lineEdit_TaskList->text());
-        query.bindValue(":date",ui->dateEditTaskList->date());
+        query.bindValue(":date",ui->dateEdit->date());
 
         if(!query.exec())
         {
@@ -274,7 +277,7 @@ void doro_manager::on_AddTaskButton_clicked()
         }
         else
         {
-            QDate date = ui->dateEditTaskList->date();
+            QDate date = ui->dateEdit->date();
             query.prepare("SELECT task FROM task_list WHERE date = :date");
             query.bindValue(":date", date);
             query.exec();
@@ -310,30 +313,14 @@ void doro_manager::on_addDistractButton_clicked()
 
 }
 
-void doro_manager::on_dateEditTaskList_dateChanged(const QDate &date)
-{
-    QDate date2 = ui->dateEditTaskList->date();
-    QSqlQuery query;
-    query.prepare("SELECT task FROM task_list WHERE date = :date");
-    query.bindValue(":date", date2);
-    if(!query.exec()){
-        QMessageBox::critical(0,"Database error.",query.lastError().text());
-        qDebug() << query.lastQuery();
-    }
-    else {
-       taskmodel->setQuery(query);
-       ui->listView_task->setModel(taskmodel);
-    }
-}
-
 void doro_manager::on_calendarWidget_clicked(const QDate &date) //WHEN DATE CHANGED SHOW TASKS FOR SELECTED DATE
 {
     QSqlQuery query;
     query.prepare("SELECT id, task, finished FROM task_list WHERE date = :date");
     query.bindValue(":date", date);
     query.exec();
-    //calmodel->setQuery(query);
-    //ui->tableView_Calendar->setModel(calmodel);
+    calmodel->setQuery(query);
+    ui->tableView_Calendar->setModel(calmodel);
 }
 
 void doro_manager::on_clearTheListButton_clicked()
@@ -356,7 +343,30 @@ void doro_manager::on_clearTheListButton_clicked()
 
 }
 
+/*void doro_manager::on_dateEdit_dateChanged(const QDate &date)
+{
+    QSqlQuery query;
+    //QString dateDate = date.toString("yyyy-MM-dd");
+    //qDebug() << dateDate;
+    query.prepare("SELECT task FROM task_list WHERE date = :date");
+    query.bindValue(":date", date);
+    qDebug() << query.lastQuery();
+    if(!query.exec()){
+        QMessageBox::critical(0,"Database error.",query.lastError().text());
+        qDebug() << query.lastQuery();
+    }
+    else {
+       qDebug() << query.lastQuery();
+      // query.prepare("SELECT task FROM task_list WHERE date = :date");
+       //query.bindValue(":date", date);
+       taskmodel->setQuery(query);
+       ui->listView_task->setModel(taskmodel);
+    }
+}*/
+
+
 doro_manager::~doro_manager()
 {
     delete ui;
 }
+
