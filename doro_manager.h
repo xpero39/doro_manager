@@ -94,7 +94,7 @@ private:
     QSqlQueryModel *taskmodel;
     //QSqlQueryModel *taskmodel2;
    // checkbox_model *calmodel;
-    QSqlQueryModel *calmodel; //Calander tab task model
+    QSqlTableModel *calmodel; //Calander tab task model
 
     delegate *mydelegate;
 };

@@ -1,23 +1,24 @@
+#include "checkbox_model.h"
 #include <QtWidgets>
 #include <QSql>
 #include <QSqlQuery>
-#include "checkbox_model.h"
 
-checkbox_model::checkbox_model(QObject *parent) : QSqlQueryModel(parent)
+checkbox_model::checkbox_model(QObject *parent) :
+    QSqlTableModel(parent)
 {
 }
 
 Qt::ItemFlags checkbox_model::flags(const QModelIndex &index) const
 {
-        Qt::ItemFlags flags = QSqlQueryModel::flags(index);
+        Qt::ItemFlags flags = QSqlTableModel::flags(index);
         if(index.column() == 2)
-             return QSqlQueryModel::flags(index) | Qt::ItemIsUserCheckable;
-        return QSqlQueryModel::flags(index);
+             return QSqlTableModel::flags(index) | Qt::ItemIsUserCheckable;
+        return QSqlTableModel::flags(index);
 }
 
 QVariant checkbox_model::data(const QModelIndex &index, int role) const
 {
-    QVariant value = QSqlQueryModel::data(index, role);
+    QVariant value = QSqlTableModel::data(index, role);
     //if(index.column() == 2 && role == Qt::CheckStateRole)
     if(index.column() == 2 && role == Qt::DisplayRole)
     {
@@ -36,22 +37,22 @@ QVariant checkbox_model::data(const QModelIndex &index, int role) const
 //setData() is called each time the user edits the table i.e. save data refresh view
 bool checkbox_model::setData(const QModelIndex &index, const QVariant &value, int /*role*/ )
 {
-    QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
-    int id = QSqlQueryModel::data(primaryKeyIndex).toInt();
-   // clear();
-    bool ok;
+    QModelIndex primaryKeyIndex = QSqlTableModel::index(index.row(), 0);
+    int id = QSqlTableModel::data(primaryKeyIndex).toInt();
+    clear();
     //if(index.column() == 2 && role == Qt::CheckStateRole)
     if(index.column() == 2)
     {
+            bool ok;
             ok = setCheckbox(id, value.toInt());
+            return ok;
     }
-    /*else
+    else
     {
-            return false;
-            //QSqlQueryModel::setData(index, value, role);
-    }*/
-    //refresh();
-    return ok;
+            //return false;
+            QSqlTableModel::setData(index, value, Qt::DisplayRole);
+    }
+        return true;
 }
 
 
@@ -63,13 +64,3 @@ bool checkbox_model::setCheckbox(int task_id, int checkbox_value)
             query.bindValue(":id", task_id);
             return query.exec();
 }
-
-/*void checkbox_model::refresh(QSqlQueryModel *model)
-{
-    model->setQuery("SELECT id, task, finished FROM task_list WHERE date = :date");
-    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
-    model->setHeaderData(1, Qt::Horizontal, QObject::tr("TASK"));
-    model->setHeaderData(2, Qt::Horizontal, QObject::tr("FINISHED"));
-
-}
-*/

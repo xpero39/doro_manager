@@ -1,13 +1,13 @@
 #ifndef DELEGATE_H
 #define DELEGATE_H
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 #include <QModelIndex>
 #include <QObject>
 #include <QSize>
 #include <QCheckBox>
 
-class delegate : public QItemDelegate
+class delegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
@@ -22,9 +22,11 @@ public:
     //Changes size based on your needs
     void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
-signals:
+    //bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index);
+    //void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
-public slots:
+private:
+    bool databaseUpdate(int task_id, int checkbox_value) const;
 
 };
 

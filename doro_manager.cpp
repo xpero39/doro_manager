@@ -25,6 +25,7 @@ doro_manager::doro_manager(QWidget *parent) :
 
     //Setting current date to dateEdit widget in Task tab
     QDate date = QDate::currentDate();
+    QString stringDate = date.toString("yyyy-MM-dd");
     ui->dateEdit->setDate(date);
 
     //Setting Timer state to be primary Active Work
@@ -73,15 +74,21 @@ doro_manager::doro_manager(QWidget *parent) :
 
      mydelegate = new delegate(this);
 
-     calmodel = new QSqlQueryModel(this);
-     query.prepare("SELECT id,task, finished FROM task_list WHERE date = :date");
-     query.bindValue(":date", date);
-     query.exec();
-     calmodel->setQuery(query);
+     calmodel = new QSqlTableModel(this);
+     calmodel->setTable("task_list");
+     calmodel->setFilter("date='"+stringDate+"'");
+     calmodel->setEditStrategy(QSqlTableModel::OnFieldChange);
+     calmodel->select();
+    // query.prepare("SELECT id,task, finished FROM task_list WHERE date = :date");
+    // query.bindValue(":date", date);
+    // query.exec();
+     //calmodel->setQuery(query);
      calmodel->setHeaderData(0, Qt::Horizontal, tr("ID"));
-     calmodel->setHeaderData(1, Qt::Horizontal, tr("TASK"));
-     calmodel->setHeaderData(2, Qt::Horizontal, tr("FINISHED"));
+     calmodel->setHeaderData(2, Qt::Horizontal, tr("TASK"));
+     calmodel->setHeaderData(3, Qt::Horizontal, tr("FINISHED"));
      ui->tableView_Calendar->setModel(calmodel);
+     ui->tableView_Calendar->hideColumn(1);
+
      //SET ITEM DELEGATE
      ui->tableView_Calendar->setItemDelegate(mydelegate);
 
@@ -315,12 +322,20 @@ void doro_manager::on_addDistractButton_clicked()
 
 void doro_manager::on_calendarWidget_clicked(const QDate &date) //WHEN DATE CHANGED SHOW TASKS FOR SELECTED DATE
 {
-    QSqlQuery query;
-    query.prepare("SELECT id, task, finished FROM task_list WHERE date = :date");
-    query.bindValue(":date", date);
-    query.exec();
-    calmodel->setQuery(query);
+    //QSqlQuery query;
+    //query.prepare("SELECT id, task, finished FROM task_list WHERE date = :date");
+    //query.bindValue(":date", date);
+    //query.exec();
+    //calmodel->setQuery(query);
+    QString stringDate = date.toString("yyyy-MM-dd");
+    calmodel->setTable("task_list");
+    calmodel->setFilter("date='"+stringDate+"'");
+    calmodel->select();
+    calmodel->setHeaderData(0, Qt::Horizontal, tr("ID"));
+    calmodel->setHeaderData(2, Qt::Horizontal, tr("TASK"));
+    calmodel->setHeaderData(3, Qt::Horizontal, tr("FINISHED"));
     ui->tableView_Calendar->setModel(calmodel);
+    ui->tableView_Calendar->hideColumn(1);
 }
 
 void doro_manager::on_clearTheListButton_clicked()
