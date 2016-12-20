@@ -20,7 +20,6 @@ doro_manager::doro_manager(QWidget *parent) :
     this->kaz = new QTimer(this);
     connect(kaz, SIGNAL(timeout()), this, SLOT(countdown()));         //inicialization of a pointer and links it to a function to countdown
 
-    //this->sound = new QSound("C:/Faks/DIPLOMSKA/Doro_Manager/doro_manager/Sounds/sound_alert.wav");
     this->sound = new QSound(":Sounds/Sounds/sound_alert.wav");
 
     //Setting current date to dateEdit widget in Task tab
@@ -74,23 +73,32 @@ doro_manager::doro_manager(QWidget *parent) :
 
      mydelegate = new delegate(this);
 
+     //connect(mydelegate/*check*/,SIGNAL(delegate::clickSignal(int)),this,SLOT(delegate::CheckMark(int))); //check the itemDelegate
+
      calmodel = new QSqlTableModel(this);
      calmodel->setTable("task_list");
      calmodel->setFilter("date='"+stringDate+"'");
      calmodel->setEditStrategy(QSqlTableModel::OnFieldChange);
      calmodel->select();
-    // query.prepare("SELECT id,task, finished FROM task_list WHERE date = :date");
-    // query.bindValue(":date", date);
-    // query.exec();
+    //query.prepare("SELECT id,task, finished FROM task_list WHERE date = :date");
+    //query.bindValue(":date", date);
+    //query.exec();
      //calmodel->setQuery(query);
      calmodel->setHeaderData(0, Qt::Horizontal, tr("ID"));
      calmodel->setHeaderData(2, Qt::Horizontal, tr("TASK"));
      calmodel->setHeaderData(3, Qt::Horizontal, tr("FINISHED"));
      ui->tableView_Calendar->setModel(calmodel);
      ui->tableView_Calendar->hideColumn(1);
+     ui->tableView_Calendar->hideColumn(0);
 
      //SET ITEM DELEGATE
-     ui->tableView_Calendar->setItemDelegate(mydelegate);
+     //ui->tableView_Calendar->setItemDelegate(mydelegate);
+     ui->tableView_Calendar->setItemDelegateForColumn(3, mydelegate);
+
+     /*taskmodel = new QSqlTableModel(this);
+     taskmodel->setTable("task_list");
+     taskmodel->setFilter("date='"+stringDate+"'");
+     taskmodel->select();*/
 
      taskmodel = new QSqlQueryModel(this);
      query.prepare("SELECT task FROM task_list WHERE date = :date");
@@ -336,6 +344,7 @@ void doro_manager::on_calendarWidget_clicked(const QDate &date) //WHEN DATE CHAN
     calmodel->setHeaderData(3, Qt::Horizontal, tr("FINISHED"));
     ui->tableView_Calendar->setModel(calmodel);
     ui->tableView_Calendar->hideColumn(1);
+    ui->tableView_Calendar->hideColumn(0);
 }
 
 void doro_manager::on_clearTheListButton_clicked()
@@ -358,13 +367,40 @@ void doro_manager::on_clearTheListButton_clicked()
 
 }
 
-/*void doro_manager::on_dateEdit_dateChanged(const QDate &date)
+void doro_manager::on_dateEdit_dateChanged(const QDate &date)
 {
-    QSqlQuery query;
-    //QString dateDate = date.toString("yyyy-MM-dd");
-    //qDebug() << dateDate;
-    query.prepare("SELECT task FROM task_list WHERE date = :date");
-    query.bindValue(":date", date);
+    /*QString stringDate = date.toString("yyyy-MM-dd");
+    QSqlQuery query("SELECT (task) FROM (task_list) WHERE date = " + stringDate);
+    //query.prepare("SELECT (task) FROM (task_list) WHERE date = :date");
+    //query.bindValue("date", date, QSql::Out);
+    //query.bindValue(":date", date);
+    qDebug() << query.lastQuery();
+    qDebug() << date;
+    if(!query.exec())
+    {
+        QMessageBox::critical(0,"Database error.",query.lastError().text());
+        qDebug() << query.lastQuery();
+    }
+    else
+    {
+        //free(taskmodel);
+        //Something wrong with memory/pointer here
+        taskmodel->setQuery(query);
+        ui->listView_task->setModel(taskmodel);
+        qDebug() << query.lastError();
+    //}*/
+
+
+        //_______________________
+
+    /*QSqlQuery query;
+    QString dateDate = date.toString("yyyy-MM-dd");
+    QDate date2 = ui->dateEdit->date();
+    qDebug() << dateDate;
+    query.prepare("SELECT task FROM (task_list) WHERE date = ?");
+    //query.bindValue(0, date2);
+    //query.bindValue(0, date, QSql::Out);
+    query.bindValue(0 , date);
     qDebug() << query.lastQuery();
     if(!query.exec()){
         QMessageBox::critical(0,"Database error.",query.lastError().text());
@@ -372,16 +408,22 @@ void doro_manager::on_clearTheListButton_clicked()
     }
     else {
        qDebug() << query.lastQuery();
-      // query.prepare("SELECT task FROM task_list WHERE date = :date");
-       //query.bindValue(":date", date);
        taskmodel->setQuery(query);
        ui->listView_task->setModel(taskmodel);
-    }
-}*/
-
-
-doro_manager::~doro_manager()
-{
-    delete ui;
+    }*/
 }
 
+
+doro_manager::~doro_manager()   //delete pointers
+{
+    delete ui;
+
+    delete timer;
+    delete timer1;
+    delete kaz;
+    delete sound;
+    delete distmodel;
+    delete taskmodel;
+    delete calmodel;
+    delete mydelegate;
+}

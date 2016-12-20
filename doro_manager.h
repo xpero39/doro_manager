@@ -77,7 +77,7 @@ private slots:                               //declared private functions
 
     void on_addDistractButton_clicked();
 
-   // void on_dateEdit_dateChanged(const QDate &date);
+    void on_dateEdit_dateChanged(const QDate &date);
 
     void on_calendarWidget_clicked(const QDate &date);
 
@@ -91,8 +91,8 @@ private:
     QTimer *kaz;
     QSound *sound;
     QSqlQueryModel *distmodel;
+    //QSqlTableModel *taskmodel;
     QSqlQueryModel *taskmodel;
-    //QSqlQueryModel *taskmodel2;
    // checkbox_model *calmodel;
     QSqlTableModel *calmodel; //Calander tab task model
 
