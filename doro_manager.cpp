@@ -94,10 +94,6 @@ doro_manager::doro_manager(QWidget *parent) :
      ui->tableView_Calendar->setItemDelegateForColumn(3, mydelegate);   //SET ITEM DELEGATE
      //ui->tableView_Calendar->resizeColumnToContents(3);
 
-     /*taskmodel = new QSqlTableModel(this);
-     taskmodel->setTable("task_list");
-     taskmodel->setFilter("date='"+stringDate+"'");
-     taskmodel->select();*/
      taskmodel = new QSqlQueryModel(this);
      query.prepare("SELECT task FROM task_list WHERE date = :date");
      query.bindValue(":date", date);

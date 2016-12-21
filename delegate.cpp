@@ -32,28 +32,15 @@ void delegate::setEditorData(QWidget *editor, const QModelIndex &index) const
    // QCheckBox *checkbox = static_cast<QCheckBox*>(editor);
     if(data == 1)
     {
-        //QCheckBox *editor = new QCheckBox(parent);
-        //checkbox->setChecked(true);
-        //checkbox->setCheckState(Qt::Checked);
         static_cast<QCheckBox*>(editor)->setCheckState(Qt::Checked);
-    } else if (data == 0)
+    }
+    else if (data == 0)
     {
-        //Checkbox is unchecked by default
-        //QCheckBox *editor = new QCheckBox(parent);
-        //checkbox->setChecked(false);
-        //checkbox->setCheckState(Qt::Unchecked);
         static_cast<QCheckBox*>(editor)->setCheckState(Qt::Unchecked);
     }
     else {
     QStyledItemDelegate::setEditorData(editor, index);
     }
-
-    /*int value = index.calmodel()->data(index, Qt::CheckStateRole).toInt();
-    //QVariant value = model->data(index, role);
-    //Qt::CheckState value = index.model()->data(index, Qt::CheckStateRole);
-    QVariant value = index.model()->data(index, Qt::CheckStateRole).toInt();
-    QCheckBox *checkbox = static_cast<QCheckBox*>(editor);
-    checkbox->checkState();
 
     //const QAbstractItemModel * model = index.model();
     //model->data(model->index(row, col), Qt::DisplayRole);
@@ -65,40 +52,20 @@ void delegate::setEditorData(QWidget *editor, const QModelIndex &index) const
     //The data you return to the model
 void delegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
-    /*QCheckBox *checkbox = static_cast<QCheckBox*>(editor);
-    checkbox->checkState();
-    bool value = checkbox->checkState();
-    model->setData(index, value, Qt::CheckStateRole);*/
     QVariant value = static_cast<QCheckBox*>(editor)->checkState();
-
     model->setData(index, value, Qt::CheckStateRole);
-
-    /*if(index.isValid())
-    {
-    QCheckBox *checkBox = static_cast<QCheckBox*>(editor);
-    int value;
-    if(checkBox->checkState() == Qt::Checked)
-    value = 1;
-    else
-    value = 0;
-
-        model->setData(index, value);
-    }
-    else
-    {
-        QStyledItemDelegate::setModelData(editor, model, index);
-    }*/
 }
 
     //Changes size based on your needs
 void delegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-   // QRect rect = option.displayAlignment(Qt::AlignCenter);
-    //editor->setGeometry(rect);
-    //  editor->setGeometry(option.displayAlignment(Qt::AlignCenter));
-    //  editor->setGeometry(option.decorationAlignment(Qt::AlignCenter));
-    //editor->setStyleSheet("margin-left:50%; margin-right:50%;");
+    QStyleOptionButton opt;
+    opt.rect = QApplication::style()->subElementRect( QStyle::SE_CheckBoxIndicator, &opt, NULL );
+    const int x = option.rect.center().x() - opt.rect.width() / 2;
+    const int y = (option.rect.center().y() - opt.rect.height() / 2)-7; //Small adjustment to apear more centrally.(paint() checkbox interference?)
+    opt.rect.moveTo( x, y );
     editor->setGeometry(option.rect);
+    editor->move(x,y);
 }
 
 /*void delegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
