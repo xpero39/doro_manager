@@ -16,12 +16,6 @@
 #include <QFile>
 #include <QVariant>
 #include <QModelIndex>
-//#include <QCheckBox>
-
-
-
-//#include <QtCore>
-//#include <QtGui>
 
 namespace Ui {
 class doro_manager;

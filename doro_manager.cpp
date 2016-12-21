@@ -75,31 +75,29 @@ doro_manager::doro_manager(QWidget *parent) :
 
      //connect(mydelegate/*check*/,SIGNAL(delegate::clickSignal(int)),this,SLOT(delegate::CheckMark(int))); //check the itemDelegate
 
+     /*query.prepare("SELECT id,task, finished FROM task_list WHERE date = :date");
+      query.bindValue(":date", date);
+      query.exec();
+      calmodel->setQuery(query);*/
      calmodel = new QSqlTableModel(this);
      calmodel->setTable("task_list");
      calmodel->setFilter("date='"+stringDate+"'");
      calmodel->setEditStrategy(QSqlTableModel::OnFieldChange);
      calmodel->select();
-    //query.prepare("SELECT id,task, finished FROM task_list WHERE date = :date");
-    //query.bindValue(":date", date);
-    //query.exec();
-     //calmodel->setQuery(query);
      calmodel->setHeaderData(0, Qt::Horizontal, tr("ID"));
      calmodel->setHeaderData(2, Qt::Horizontal, tr("TASK"));
      calmodel->setHeaderData(3, Qt::Horizontal, tr("FINISHED"));
      ui->tableView_Calendar->setModel(calmodel);
      ui->tableView_Calendar->hideColumn(1);
      ui->tableView_Calendar->hideColumn(0);
-
-     //SET ITEM DELEGATE
      //ui->tableView_Calendar->setItemDelegate(mydelegate);
-     ui->tableView_Calendar->setItemDelegateForColumn(3, mydelegate);
+     ui->tableView_Calendar->setItemDelegateForColumn(3, mydelegate);   //SET ITEM DELEGATE
+     //ui->tableView_Calendar->resizeColumnToContents(3);
 
      /*taskmodel = new QSqlTableModel(this);
      taskmodel->setTable("task_list");
      taskmodel->setFilter("date='"+stringDate+"'");
      taskmodel->select();*/
-
      taskmodel = new QSqlQueryModel(this);
      query.prepare("SELECT task FROM task_list WHERE date = :date");
      query.bindValue(":date", date);
