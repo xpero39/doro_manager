@@ -7,6 +7,7 @@
 #include <QStyleOptionButton>
 #include <QMouseEvent>
 
+#include <QtDebug>
 
 delegate::delegate(QObject *parent) :
     QStyledItemDelegate(parent)
@@ -41,13 +42,6 @@ void delegate::setEditorData(QWidget *editor, const QModelIndex &index) const
     else {
     QStyledItemDelegate::setEditorData(editor, index);
     }
-
-    //const QAbstractItemModel * model = index.model();
-    //model->data(model->index(row, col), Qt::DisplayRole);
-   // QVariant row = index.data();
-    //index.row();
-
-    //databaseUpdate(row,value);*/
 }
     //The data you return to the model
 void delegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
@@ -103,7 +97,6 @@ void delegate::paint(QPainter *painter, const QStyleOptionViewItem &option, cons
                opt.state |= QStyle::State_Off;
            }
 
-
           // Check box rect
            opt.rect = QApplication::style()->subElementRect( QStyle::SE_CheckBoxIndicator, &opt, NULL );
            const int x = option.rect.center().x() - opt.rect.width() / 2;
@@ -149,7 +142,7 @@ void delegate::paint(QPainter *painter, const QStyleOptionViewItem &option, cons
 
 bool delegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
-      /*  switch ( event->type() )
+       switch ( event->type() )
         {
         case QEvent::MouseButtonPress:
             m_lastClickedIndex = index;
@@ -163,6 +156,23 @@ bool delegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyl
                 if ( e->button() != Qt::LeftButton )
                     break;
                 m_lastClickedIndex = QModelIndex();
+
+                //Update database
+                QVariant id = index.sibling(index.row(),0).data(Qt::DisplayRole).toInt();
+                QVariant value = index.model()->data(index, Qt::DisplayRole).toInt();
+                int xid = id.toInt();
+                int xvalue = value.toInt();
+                if (xvalue == 0)
+                {
+                    xvalue = 1;
+                   // opt.state |= QStyle::State_On;
+                }
+                else
+                {
+                    xvalue = 0;
+                 //   opt.state |= QStyle::State_Off;
+                }
+                databaseUpdate(xid,xvalue);
 
                 QStyleOptionButton opt;
                 opt.rect = QApplication::style()->subElementRect( QStyle::SE_CheckBoxIndicator, &opt, NULL );
@@ -185,6 +195,7 @@ bool delegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyl
                     case Qt::Checked:
                         state = Qt::Unchecked;
                         break;
+
                     }
 
                     model->setData( index, state, Qt::CheckStateRole );
@@ -196,19 +207,28 @@ bool delegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyl
             break;
         }
 
-        return QAbstractItemDelegate::editorEvent( event, model, option, index );*/
+        return QStyledItemDelegate::editorEvent( event, model, option, index );
 
-    if (event->type() == QEvent::MouseButtonRelease)
+  /*  if (event->type() == QEvent::MouseButtonRelease)
        {
            bool value = index.data(CHECK_ROLE).toBool();
-
-           // invert checkbox state
+            // invert checkbox state
            model->setData(index, !value, CHECK_ROLE);
+
+          // QVariant value = static_cast<QCheckBox*>(editor)->checkState();
+          // model->setData(index, !value, Qt::CheckStateRole);
 
            return true;
        }
 
        return QStyledItemDelegate::editorEvent(event, model, option, index);
+
+       //const QAbstractItemModel * model = index.model();
+       //model->data(model->index(row, col), Qt::DisplayRole);
+      // QVariant row = index.data();
+       //index.row();
+
+       //databaseUpdate(row,value);*/
 }
 
 bool delegate::databaseUpdate(int task_id, int checkbox_value) const
@@ -218,4 +238,5 @@ bool delegate::databaseUpdate(int task_id, int checkbox_value) const
     query.bindValue(":finished", checkbox_value);
     query.bindValue(":id", task_id);
     return query.exec();
+    qDebug() << query.lastQuery();
 }

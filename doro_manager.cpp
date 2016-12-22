@@ -324,11 +324,11 @@ void doro_manager::on_addDistractButton_clicked()
 
 void doro_manager::on_calendarWidget_clicked(const QDate &date) //WHEN DATE CHANGED SHOW TASKS FOR SELECTED DATE
 {
-    //QSqlQuery query;
-    //query.prepare("SELECT id, task, finished FROM task_list WHERE date = :date");
-    //query.bindValue(":date", date);
-    //query.exec();
-    //calmodel->setQuery(query);
+    /*QSqlQuery query;
+    query.prepare("SELECT id, task, finished FROM task_list WHERE date = :date");
+    query.bindValue(":date", date);
+    query.exec();
+    calmodel->setQuery(query);*/
     QString stringDate = date.toString("yyyy-MM-dd");
     calmodel->setTable("task_list");
     calmodel->setFilter("date='"+stringDate+"'");
