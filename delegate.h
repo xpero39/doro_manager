@@ -31,6 +31,7 @@ public:
 private:
     bool databaseUpdate(int task_id, int checkbox_value) const;
     QModelIndex m_lastClickedIndex;
+    const int CHECK_ROLE = Qt::UserRole + 1;
 
 signals:
     void clickSignal(int);

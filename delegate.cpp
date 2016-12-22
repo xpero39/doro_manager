@@ -93,27 +93,15 @@ void delegate::paint(QPainter *painter, const QStyleOptionViewItem &option, cons
            opt.state = QStyle::State_Enabled; // CheckBox enabled
            if ( option.state & QStyle::State_MouseOver )
                opt.state |= QStyle::State_MouseOver; // Mouse over sell
-           switch ( state )  // Check box state
-           {
-           case Qt::Unchecked:
-               opt.state |= QStyle::State_Off;
-               break;
-           case Qt::PartiallyChecked:
-               opt.state |= QStyle::State_NoChange;
-               break;
-           case Qt::Checked:
-               opt.state |= QStyle::State_On;
-               break;
-           }
 
-           /*QVariant data = index.model()->data(index, Qt::CheckStateRole).toInt();
+           QVariant data = index.model()->data(index, Qt::DisplayRole/*CheckStateRole*/).toInt();
            if(data == 1)
            {
                opt.state |= QStyle::State_On;
            } else
            {
                opt.state |= QStyle::State_Off;
-           }*/
+           }
 
 
           // Check box rect
@@ -161,7 +149,7 @@ void delegate::paint(QPainter *painter, const QStyleOptionViewItem &option, cons
 
 bool delegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
-        switch ( event->type() )
+      /*  switch ( event->type() )
         {
         case QEvent::MouseButtonPress:
             m_lastClickedIndex = index;
@@ -208,7 +196,19 @@ bool delegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyl
             break;
         }
 
-        return QAbstractItemDelegate::editorEvent( event, model, option, index );
+        return QAbstractItemDelegate::editorEvent( event, model, option, index );*/
+
+    if (event->type() == QEvent::MouseButtonRelease)
+       {
+           bool value = index.data(CHECK_ROLE).toBool();
+
+           // invert checkbox state
+           model->setData(index, !value, CHECK_ROLE);
+
+           return true;
+       }
+
+       return QStyledItemDelegate::editorEvent(event, model, option, index);
 }
 
 bool delegate::databaseUpdate(int task_id, int checkbox_value) const
