@@ -80,11 +80,11 @@ void delegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem 
 
 void delegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    // Setting parameters
+            // Setting parameters
            Qt::CheckState state = (Qt::CheckState)index.data( Qt::CheckStateRole ).toInt();
            QStyleOptionButton opt;
 
-           opt.state = QStyle::State_Enabled; // CheckBox enabled
+           opt.state = QStyle::State_Enabled; // Enabling checkbox
            if ( option.state & QStyle::State_MouseOver )
                opt.state |= QStyle::State_MouseOver; // Mouse over sell
 
@@ -160,7 +160,7 @@ bool delegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyl
                 //Update database
                 QVariant id = index.sibling(index.row(),0).data(Qt::DisplayRole).toInt();
                 QVariant value = index.model()->data(index, Qt::DisplayRole).toInt();
-                int xid = id.toInt();
+               /* int xid = id.toInt();
                 int xvalue = value.toInt();
                 if (xvalue == 0)
                 {
@@ -172,7 +172,7 @@ bool delegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyl
                     xvalue = 0;
                  //   opt.state |= QStyle::State_Off;
                 }
-                databaseUpdate(xid,xvalue);
+                databaseUpdate(xid,xvalue);*/
 
                 QStyleOptionButton opt;
                 opt.rect = QApplication::style()->subElementRect( QStyle::SE_CheckBoxIndicator, &opt, NULL );
@@ -184,7 +184,7 @@ bool delegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyl
                 {
                     // TODO: process click on checkbox logic
                     Qt::CheckState state = (Qt::CheckState)index.data( Qt::CheckStateRole ).toInt();
-                    switch ( state )
+                   /* switch ( state )
                     {
                     case Qt::Unchecked:
                         state = Qt::PartiallyChecked;
@@ -194,11 +194,26 @@ bool delegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyl
                         break;
                     case Qt::Checked:
                         state = Qt::Unchecked;
-                        break;
+                        break;*/
 
-                    }
-
-                    model->setData( index, state, Qt::CheckStateRole );
+                        int xid = id.toInt();
+                        int xvalue = value.toInt();
+                        if (xvalue == 0)
+                        {
+                            xvalue = 1;
+                           // opt.state |= QStyle::State_On;
+                            state = Qt::Checked;
+                        }
+                        else
+                        {
+                            xvalue = 0;
+                          //  opt.state |= QStyle::State_Off;
+                            state = Qt::Unchecked;
+                        }
+                        databaseUpdate(xid,xvalue);
+                        //emit dataChanged();
+                        emit clickSignal();
+                        model->setData( index, state, Qt::CheckStateRole );
                 }
                 return true;
             }
@@ -240,3 +255,4 @@ bool delegate::databaseUpdate(int task_id, int checkbox_value) const
     return query.exec();
     qDebug() << query.lastQuery();
 }
+

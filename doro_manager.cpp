@@ -72,8 +72,7 @@ doro_manager::doro_manager(QWidget *parent) :
      ui->listView_distraction->setModel(distmodel);
 
      mydelegate = new delegate(this);
-
-     //connect(mydelegate/*check*/,SIGNAL(delegate::clickSignal(int)),this,SLOT(delegate::CheckMark(int))); //check the itemDelegate
+     connect(mydelegate,SIGNAL(clickSignal()),this, SLOT(refresh())); //Connects delegate editorEvent() with refresh() in doro_manager class
 
      /*query.prepare("SELECT id,task, finished FROM task_list WHERE date = :date");
       query.bindValue(":date", date);
@@ -407,6 +406,21 @@ void doro_manager::on_dateEdit_dateChanged(const QDate &date)
     }*/
 }
 
+void doro_manager::refresh()
+{
+    QString stringDate = ui->calendarWidget->selectedDate().toString("yyyy-MM-dd");
+    qDebug() << stringDate;
+    calmodel->setTable("task_list");
+    calmodel->setFilter("date='"+stringDate+"'");
+    calmodel->select();
+    calmodel->setHeaderData(0, Qt::Horizontal, tr("ID"));
+    calmodel->setHeaderData(2, Qt::Horizontal, tr("TASK"));
+    calmodel->setHeaderData(3, Qt::Horizontal, tr("FINISHED"));
+    ui->tableView_Calendar->setModel(calmodel);
+    ui->tableView_Calendar->hideColumn(1);
+    ui->tableView_Calendar->hideColumn(0);
+    //instead of new function just call on calendarWidget clicked function?
+}
 
 doro_manager::~doro_manager()   //delete pointers
 {

@@ -29,7 +29,7 @@ alternate-background-color: rgb(66, 180, 255);
 </string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -764,8 +764,6 @@ p, li { white-space: pre-wrap; }
      </widget>
     </widget>
    </widget>
-   <zorder>tabWidget</zorder>
-   <zorder>textBrowser_Calander</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

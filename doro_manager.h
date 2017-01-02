@@ -77,6 +77,8 @@ private slots:                               //declared private functions
 
     void on_clearTheListButton_clicked();
 
+    void refresh();
+
 private:
     Ui::doro_manager *ui;
 

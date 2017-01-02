@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QSize>
 #include <QCheckBox>
+#include <QSqlTableModel>
 
 class delegate : public QStyledItemDelegate
 {
@@ -34,7 +35,7 @@ private:
     const int CHECK_ROLE = Qt::UserRole + 1;
 
 signals:
-    void clickSignal(int);
+    void clickSignal();
 
 };
 
