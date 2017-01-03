@@ -20,7 +20,7 @@ doro_manager::doro_manager(QWidget *parent) :
     this->kaz = new QTimer(this);
     connect(kaz, SIGNAL(timeout()), this, SLOT(countdown()));         //inicialization of a pointer and links it to a function to countdown
 
-    this->sound = new QSound(":Sounds/Sounds/sound_alert.wav");
+    this->sound = new QSound(":Sounds/Sounds/sound_alert.wav");     //adding a sound file to QSound pointer
 
     //Setting current date to dateEdit widget in Task tab
     QDate date = QDate::currentDate();
@@ -45,25 +45,7 @@ doro_manager::doro_manager(QWidget *parent) :
     image_logo = image_logo.scaledToWidth(ui->label_tl_pic->width(), Qt::SmoothTransformation);
     ui->label_tl_pic->setPixmap(image_logo);
 
-   /* //Database connection
-    QString dir_path = QCoreApplication::applicationDirPath(); //Gets directory of the executable
-    //dir_path.remove(position number,length number);
-   // dir_path.replace(45,5,"/Database/doro_data.db");
-    QSqlDatabase db_con = QSqlDatabase::addDatabase("QSQLITE");
-    //db_con.setDatabaseName("C:/Faks/DIPLOMSKA/Doro_Manager/doro_manager/Database/doro_data.db");  //path
-    db_con.setDatabaseName(dir_path +"/Database/doro_data.db");
-
-    ui->textBrowser_Calander->setText(dir_path + "/Database/doro_data.db");
-
-       if (!db_con.open()){
-            ui->textBrowser_Calander->append("Error: Connection with database failed.");
-       }
-       else {
-            ui->textBrowser_Calander->append("Database: Connection successful.");
-       }
-*/
      //Show data in Calender widget and in task list, dist. list
-
      distmodel = new QSqlQueryModel(this);
      QSqlQuery query;
      query.prepare("SELECT distraction FROM dist_list");
@@ -101,7 +83,6 @@ doro_manager::doro_manager(QWidget *parent) :
      ui->listView_task->setModel(taskmodel);
 }
 
-
 //METHODS AND BUTTONS SIGNALS
 void doro_manager::showDateTime()                   //method to show current date and time
 {
@@ -119,7 +100,6 @@ void doro_manager::showTime()                   //method to show current time
     QTime time = QTime::currentTime();
     QString text = time.toString("hh : mm : ss");
     ui->clockLabel->setText(text);
-
 }
 
 void doro_manager::countdown()                        //function sets countdown timer value depending on work/break interwall and subtracts time
@@ -269,10 +249,12 @@ void doro_manager::on_breakButton_clicked()     // Pomdoro timer tab button whic
 
 void doro_manager::on_AddTaskButton_clicked()
 {
-    if(!ui->lineEdit_TaskList->isModified()){
+    if(!ui->lineEdit_TaskList->isModified())
+    {
          //DOES NOTHING IF NOT MODIFIED
     }
-    else {
+    else
+    {
         QSqlQuery query;
         query.prepare("INSERT INTO task_list(date,task) VALUES(:date,:task)");
         query.bindValue(":task",ui->lineEdit_TaskList->text());
@@ -323,11 +305,6 @@ void doro_manager::on_addDistractButton_clicked()
 
 void doro_manager::on_calendarWidget_clicked(const QDate &date) //WHEN DATE CHANGED SHOW TASKS FOR SELECTED DATE
 {
-    /*QSqlQuery query;
-    query.prepare("SELECT id, task, finished FROM task_list WHERE date = :date");
-    query.bindValue(":date", date);
-    query.exec();
-    calmodel->setQuery(query);*/
     QString stringDate = date.toString("yyyy-MM-dd");
     calmodel->setTable("task_list");
     calmodel->setFilter("date='"+stringDate+"'");
@@ -360,9 +337,9 @@ void doro_manager::on_clearTheListButton_clicked()
 
 }
 
-void doro_manager::on_dateEdit_dateChanged(const QDate &date)
+/*void doro_manager::on_dateEdit_dateChanged(const QDate &date)
 {
-    /*QString stringDate = date.toString("yyyy-MM-dd");
+    QString stringDate = date.toString("yyyy-MM-dd");
     QSqlQuery query("SELECT (task) FROM (task_list) WHERE date = " + stringDate);
     //query.prepare("SELECT (task) FROM (task_list) WHERE date = :date");
     //query.bindValue("date", date, QSql::Out);
@@ -403,13 +380,12 @@ void doro_manager::on_dateEdit_dateChanged(const QDate &date)
        qDebug() << query.lastQuery();
        taskmodel->setQuery(query);
        ui->listView_task->setModel(taskmodel);
-    }*/
-}
+    }
+}*/
 
 void doro_manager::refresh()
 {
     QString stringDate = ui->calendarWidget->selectedDate().toString("yyyy-MM-dd");
-    qDebug() << stringDate;
     calmodel->setTable("task_list");
     calmodel->setFilter("date='"+stringDate+"'");
     calmodel->select();
@@ -419,7 +395,6 @@ void doro_manager::refresh()
     ui->tableView_Calendar->setModel(calmodel);
     ui->tableView_Calendar->hideColumn(1);
     ui->tableView_Calendar->hideColumn(0);
-    //instead of new function just call on calendarWidget clicked function?
 }
 
 doro_manager::~doro_manager()   //delete pointers

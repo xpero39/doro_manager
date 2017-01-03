@@ -16,14 +16,14 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         doro_manager.cpp \
-    delegate.cpp \
-    checkbox_model.cpp
+    delegate.cpp
 
 HEADERS  += doro_manager.h \
     connection.h \
-    delegate.h \
-    checkbox_model.h
+    delegate.h
 
 FORMS    += doro_manager.ui
 
 RESOURCES += resources.qrc
+
+RC_ICONS = doro.ico

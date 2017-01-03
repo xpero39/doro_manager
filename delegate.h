@@ -22,17 +22,15 @@ public:
     //The data you return to the model
     void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
     //Changes size based on your needs
-   void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-
-    //bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index);
+    void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    //Paints over the model, we draw a checkbox
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-
-  /*  virtual*/ bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index);
+    //EditorEvent has logic to what should happen when a certain event i.e. Mousebutton click is triggered.
+    bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index);
 
 private:
     bool databaseUpdate(int task_id, int checkbox_value) const;
     QModelIndex m_lastClickedIndex;
-    const int CHECK_ROLE = Qt::UserRole + 1;
 
 signals:
     void clickSignal();

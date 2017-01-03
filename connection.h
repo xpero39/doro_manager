@@ -22,7 +22,6 @@ static bool createConnection()
                      "Click Cancel to exit."), QMessageBox::Cancel);
         return false;
     }
-
    return true;
 }
 

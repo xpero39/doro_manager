@@ -2,11 +2,9 @@
 #include <QApplication>
 #include <QSqlQuery>
 #include <QEvent>
-
 #include <QPainter>
 #include <QStyleOptionButton>
 #include <QMouseEvent>
-
 #include <QtDebug>
 
 delegate::delegate(QObject *parent) :
@@ -28,9 +26,7 @@ QWidget *delegate::createEditor(QWidget *parent, const QStyleOptionViewItem &opt
     //Current data that you modify
 void delegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-    //QVariant data = index.model()->data(index, Qt::CheckStateRole).toInt();
     QVariant data = index.model()->data(index, Qt::DisplayRole).toInt();
-   // QCheckBox *checkbox = static_cast<QCheckBox*>(editor);
     if(data == 1)
     {
         static_cast<QCheckBox*>(editor)->setCheckState(Qt::Checked);
@@ -62,22 +58,6 @@ void delegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem 
     editor->move(x,y);
 }
 
-/*void delegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-     QStyleOptionViewItem viewItemOption(option);
-
-        if (index.isValid())
-        {
-            const int textMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
-            QRect newRect = QStyle::alignedRect(option.direction, Qt::AlignCenter,
-                                                QSize(option.decorationSize.width() + 5,option.decorationSize.height()),
-                                                QRect(option.rect.x() + textMargin, option.rect.y(),
-                                                      option.rect.width() - (2 * textMargin), option.rect.height()));
-            viewItemOption.rect = newRect;
-        }
-        QStyledItemDelegate::paint(painter, viewItemOption, index);
-}*/
-
 void delegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
             // Setting parameters
@@ -86,7 +66,7 @@ void delegate::paint(QPainter *painter, const QStyleOptionViewItem &option, cons
 
            opt.state = QStyle::State_Enabled; // Enabling checkbox
            if ( option.state & QStyle::State_MouseOver )
-               opt.state |= QStyle::State_MouseOver; // Mouse over sell
+               opt.state |= QStyle::State_MouseOver; // Mouse oversell
 
            QVariant data = index.model()->data(index, Qt::DisplayRole/*CheckStateRole*/).toInt();
            if(data == 1)
@@ -97,48 +77,19 @@ void delegate::paint(QPainter *painter, const QStyleOptionViewItem &option, cons
                opt.state |= QStyle::State_Off;
            }
 
-          // Check box rect
+          // Checkbox rect
            opt.rect = QApplication::style()->subElementRect( QStyle::SE_CheckBoxIndicator, &opt, NULL );
            const int x = option.rect.center().x() - opt.rect.width() / 2;
            const int y = option.rect.center().y() - opt.rect.height() / 2;
            opt.rect.moveTo( x, y );
 
-           // Optional: draw hover focus
+           // Draws hover focus
            if ( option.state & QStyle::State_MouseOver )
                painter->fillRect( option.rect, QBrush( QColor( 0xff, 0xff, 0xaa, 0x60 ) ) );
 
-           // Mandatory: drawing check box
+           // Drawing checkbox
            QApplication::style()->drawControl( QStyle::CE_CheckBox, &opt, painter );
 }
-
-/*bool delegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
-{
-        Q_ASSERT(event);
-        Q_ASSERT(model);
-
-        // make sure that the item is checkable
-        Qt::ItemFlags flags = model->flags(index);
-        if (!(flags & Qt::ItemIsUserCheckable) || !(flags & Qt::ItemIsEnabled))
-            return false;
-        // make sure that we have a check state
-        QVariant value = index.data(Qt::CheckStateRole);
-        if (!value.isValid())
-            return false;
-        // make sure that we have the right event type
-        if (event->type() == QEvent::MouseButtonRelease)
-        {
-            const int textMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
-            QRect checkRect = QStyle::alignedRect(option.direction, Qt::AlignCenter, option.decorationSize, QRect(option.rect.x() + (2 * textMargin), option.rect.y(), option.rect.width() - (2 * textMargin), option.rect.height()));
-
-        } else {
-            return false;
-        }
-
-        Qt::CheckState state = (static_cast<Qt::CheckState>(value.toInt()) == Qt::Checked ? Qt::Unchecked : Qt::Checked);
-
-                emit(clickSignal(index.row()));
-                return model->setData(index, state, Qt::CheckStateRole);
-}*/
 
 bool delegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
@@ -182,7 +133,7 @@ bool delegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyl
 
                 if ( opt.rect.contains( e->pos() ) )
                 {
-                    // TODO: process click on checkbox logic
+                    // Process click on checkbox logic
                     Qt::CheckState state = (Qt::CheckState)index.data( Qt::CheckStateRole ).toInt();
                    /* switch ( state )
                     {
@@ -201,17 +152,14 @@ bool delegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyl
                         if (xvalue == 0)
                         {
                             xvalue = 1;
-                           // opt.state |= QStyle::State_On;
                             state = Qt::Checked;
                         }
                         else
                         {
                             xvalue = 0;
-                          //  opt.state |= QStyle::State_Off;
                             state = Qt::Unchecked;
                         }
                         databaseUpdate(xid,xvalue);
-                        //emit dataChanged();
                         emit clickSignal();
                         model->setData( index, state, Qt::CheckStateRole );
                 }
@@ -223,27 +171,6 @@ bool delegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyl
         }
 
         return QStyledItemDelegate::editorEvent( event, model, option, index );
-
-  /*  if (event->type() == QEvent::MouseButtonRelease)
-       {
-           bool value = index.data(CHECK_ROLE).toBool();
-            // invert checkbox state
-           model->setData(index, !value, CHECK_ROLE);
-
-          // QVariant value = static_cast<QCheckBox*>(editor)->checkState();
-          // model->setData(index, !value, Qt::CheckStateRole);
-
-           return true;
-       }
-
-       return QStyledItemDelegate::editorEvent(event, model, option, index);
-
-       //const QAbstractItemModel * model = index.model();
-       //model->data(model->index(row, col), Qt::DisplayRole);
-      // QVariant row = index.data();
-       //index.row();
-
-       //databaseUpdate(row,value);*/
 }
 
 bool delegate::databaseUpdate(int task_id, int checkbox_value) const
