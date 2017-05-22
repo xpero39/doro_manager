@@ -337,52 +337,6 @@ void doro_manager::on_clearTheListButton_clicked()
 
 }
 
-/*void doro_manager::on_dateEdit_dateChanged(const QDate &date)
-{
-    QString stringDate = date.toString("yyyy-MM-dd");
-    QSqlQuery query("SELECT (task) FROM (task_list) WHERE date = " + stringDate);
-    //query.prepare("SELECT (task) FROM (task_list) WHERE date = :date");
-    //query.bindValue("date", date, QSql::Out);
-    //query.bindValue(":date", date);
-    qDebug() << query.lastQuery();
-    qDebug() << date;
-    if(!query.exec())
-    {
-        QMessageBox::critical(0,"Database error.",query.lastError().text());
-        qDebug() << query.lastQuery();
-    }
-    else
-    {
-        //free(taskmodel);
-        //Something wrong with memory/pointer here
-        taskmodel->setQuery(query);
-        ui->listView_task->setModel(taskmodel);
-        qDebug() << query.lastError();
-    //}*/
-
-
-        //_______________________
-
-    /*QSqlQuery query;
-    QString dateDate = date.toString("yyyy-MM-dd");
-    QDate date2 = ui->dateEdit->date();
-    qDebug() << dateDate;
-    query.prepare("SELECT task FROM (task_list) WHERE date = ?");
-    //query.bindValue(0, date2);
-    //query.bindValue(0, date, QSql::Out);
-    query.bindValue(0 , date);
-    qDebug() << query.lastQuery();
-    if(!query.exec()){
-        QMessageBox::critical(0,"Database error.",query.lastError().text());
-        qDebug() << query.lastQuery();
-    }
-    else {
-       qDebug() << query.lastQuery();
-       taskmodel->setQuery(query);
-       ui->listView_task->setModel(taskmodel);
-    }
-}*/
-
 void doro_manager::refresh()
 {
     QString stringDate = ui->calendarWidget->selectedDate().toString("yyyy-MM-dd");
