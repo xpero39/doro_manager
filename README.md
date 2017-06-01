@@ -1,5 +1,8 @@
 DORO MANAGER is a pomodoro tehnique time managment application made by C++ programming language using Qt Framework for graphical user interface.
 
+https://cloud.githubusercontent.com/assets/16490239/26691029/eee60202-46fb-11e7-9718-590a09431a81.png
+https://cloud.githubusercontent.com/assets/16490239/26691034/f16cf0d0-46fb-11e7-8fa7-325294deb554.png
+
 The MIT License
 Copyright (c) 2016 Peter Vreča
 
