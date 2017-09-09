@@ -11,10 +11,10 @@ static bool createConnection()
 {
     QString dir_path = QCoreApplication::applicationDirPath(); //Gets directory of the executable
     QSqlDatabase db_con = QSqlDatabase::addDatabase("QSQLITE");
-  //  db_con.setDatabaseName(dir_path +"/Database/doro_data.db"); For release
+    //db_con.setDatabaseName(dir_path +"/Database/doro_data.db"); For release
     db_con.setDatabaseName(dir_path +"/doro_data.db"); // for debuging
-   // QMessageBox::critical(0,"Lol", dir_path,QMessageBox::Cancel); //testing path
-   //db_con.setDatabaseName(":memory:");
+    //QMessageBox::critical(0,"Lol", dir_path,QMessageBox::Cancel); //testing path
+
     if (!db_con.open()) {
         QMessageBox::critical(0, qApp->tr("Can't open the database"),
             qApp->tr("Unable to establish a database connection.\n"

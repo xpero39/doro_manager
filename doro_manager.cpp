@@ -56,10 +56,7 @@ doro_manager::doro_manager(QWidget *parent) :
      mydelegate = new delegate(this);
      connect(mydelegate,SIGNAL(clickSignal()),this, SLOT(refresh())); //Connects delegate editorEvent() with refresh() in doro_manager class
 
-     /*query.prepare("SELECT id,task, finished FROM task_list WHERE date = :date");
-      query.bindValue(":date", date);
-      query.exec();
-      calmodel->setQuery(query);*/
+     calmodel->setQuery(query);*/
      calmodel = new QSqlTableModel(this);
      calmodel->setTable("task_list");
      calmodel->setFilter("date='"+stringDate+"'");
