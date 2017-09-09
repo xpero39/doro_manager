@@ -70,8 +70,6 @@ private slots:                               //declared private functions
 
     void on_addDistractButton_clicked();
 
-    //void on_dateEdit_dateChanged(const QDate &date);
-
     void on_calendarWidget_clicked(const QDate &date);
 
     void on_clearTheListButton_clicked();
@@ -81,7 +79,7 @@ private slots:                               //declared private functions
 private:
     Ui::doro_manager *ui;
 
-    QTimer *timer;                          //declared pointers
+    QTimer *timer;       //declared pointers
     QTimer *timer1;
     QTimer *kaz;
     QSound *sound;

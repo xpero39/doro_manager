@@ -94,7 +94,7 @@ void delegate::paint(QPainter *painter, const QStyleOptionViewItem &option, cons
 bool delegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
        switch ( event->type() )
-        {
+       {
         case QEvent::MouseButtonPress:
             m_lastClickedIndex = index;
             break;
@@ -111,19 +111,6 @@ bool delegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyl
                 //Update database
                 QVariant id = index.sibling(index.row(),0).data(Qt::DisplayRole).toInt();
                 QVariant value = index.model()->data(index, Qt::DisplayRole).toInt();
-               /* int xid = id.toInt();
-                int xvalue = value.toInt();
-                if (xvalue == 0)
-                {
-                    xvalue = 1;
-                   // opt.state |= QStyle::State_On;
-                }
-                else
-                {
-                    xvalue = 0;
-                 //   opt.state |= QStyle::State_Off;
-                }
-                databaseUpdate(xid,xvalue);*/
 
                 QStyleOptionButton opt;
                 opt.rect = QApplication::style()->subElementRect( QStyle::SE_CheckBoxIndicator, &opt, NULL );
@@ -135,20 +122,8 @@ bool delegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyl
                 {
                     // Process click on checkbox logic
                     Qt::CheckState state = (Qt::CheckState)index.data( Qt::CheckStateRole ).toInt();
-                   /* switch ( state )
-                    {
-                    case Qt::Unchecked:
-                        state = Qt::PartiallyChecked;
-                        break;
-                    case Qt::PartiallyChecked:
-                        state = Qt::Checked;
-                        break;
-                    case Qt::Checked:
-                        state = Qt::Unchecked;
-                        break;*/
-
-                        int xid = id.toInt();
-                        int xvalue = value.toInt();
+                    int xid = id.toInt();
+                    int xvalue = value.toInt();
                         if (xvalue == 0)
                         {
                             xvalue = 1;
