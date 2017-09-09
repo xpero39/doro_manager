@@ -6,7 +6,6 @@
 #include <QObject>
 #include <QSize>
 #include <QCheckBox>
-#include <QSqlTableModel>
 
 class delegate : public QStyledItemDelegate
 {

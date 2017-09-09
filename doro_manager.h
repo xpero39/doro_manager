@@ -16,6 +16,7 @@
 #include <QFile>
 #include <QVariant>
 #include <QModelIndex>
+#include <QSqlTableModel>
 
 namespace Ui {
 class doro_manager;
